@@ -112,11 +112,11 @@ export default {
   name: 'app',
   data() {
     return {
-      erc_identity: '0x283270758FcB45b1DF1C760D0Bc2801F39846b18',
+      erc_identity: '',
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
-      operational_wallet: '0xeBeF83A03F87d810234Dd1BbDfa75EE3322929e4',
+      operational_wallet: '',
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
