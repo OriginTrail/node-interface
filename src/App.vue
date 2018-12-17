@@ -214,4 +214,8 @@ export default {
   .el-message__content {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
   }
+
+  .el-main {
+    height: 100%;
+  }
 </style>
