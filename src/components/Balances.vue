@@ -1,7 +1,11 @@
 <template>
   <div>
-    <h2 >Node profile</h2>
-    <el-row v-bind:class="[total_trac_changed ? 'changed' : '', 'balance-row']">
+    <h2>Node profile</h2>
+    <el-row v-bind:class="[
+    total_trac_increased ? 'increased' : '',
+    total_trac_decreased ? 'decreased' : '',
+    'balance-row'
+    ]">
       <el-col :span="12" class="align-left">TOTAL</el-col>
       <el-col :span="12">{{total_trac | toTrac}} TRAC</el-col>
     </el-row>
@@ -25,19 +29,31 @@
     <h2>Balances</h2>
     <h1>Operational wallet</h1>
     <h6>{{operationalWallet}}</h6>
-    <el-row class="balance-row">
+    <el-row class="balance-row" v-bind:class="[
+    ow_eth_balance_increased ? 'increased' : '',
+    ow_eth_balance_decreased ? 'decreased' : '',
+    'balance-row'
+    ]">
       <el-col :span="12" class="align-left">ETH</el-col>
       <el-col :span="12">{{ow_eth_balance}}</el-col>
     </el-row>
 
     <h1>Management wallet</h1>
     <h6>{{management_wallet}}</h6>
-    <el-row class="balance-row">
+    <el-row class="balance-row" v-bind:class="[
+    mw_eth_balance_increased ? 'increased' : '',
+    mw_eth_balance_decreased ? 'decreased' : '',
+    'balance-row'
+    ]">
       <el-col :span="12" class="align-left">ETH</el-col>
       <el-col :span="12">{{mw_eth_balance}}</el-col>
     </el-row>
 
-    <el-row class="balance-row">
+    <el-row class="balance-row" v-bind:class="[
+    mw_trac_balance_increased ? 'increased' : '',
+    mw_trac_balance_decreased ? 'decreased' : '',
+    'balance-row'
+    ]">
       <el-col :span="12" class="align-left">TRAC</el-col>
       <el-col :span="12">{{mw_trac_balance}}</el-col>
     </el-row>
@@ -58,6 +74,14 @@ export default {
       management_wallet: '',
       total_trac_changed: false,
       locked_trac_changed: false,
+      total_trac_increased: false,
+      total_trac_decreased: false,
+      mw_trac_balance_increased: false,
+      mw_trac_balance_decreased: false,
+      mw_eth_balance_increased: false,
+      mw_eth_balance_decreased: false,
+      ow_eth_balance_increased: false,
+      ow_eth_balance_decreased: false,
     };
   },
   watch: {
@@ -73,13 +97,97 @@ export default {
     },
     total_trac(newVal, oldVal) {
       if (newVal.toString() !== oldVal.toString() && oldVal !== 0) {
-        this.total_trac_changed = true;
-        setTimeout(() => {
-          this.total_trac_changed = false;
-        }, 3000);
+        if (newVal.toString() > oldVal.toString()) {
+          this.total_trac_increased = true;
+          setTimeout(() => {
+            this.total_trac_increased = false;
+          }, 3000);
+        } else {
+          this.total_trac_decreased = true;
+          setTimeout(() => {
+            this.total_trac_decreased = false;
+          }, 3000);
+        }
+        // this.total_trac_changed = true;
       } else {
-        this.total_trac_changed = false;
+        this.total_trac_increased = false;
+        this.total_trac_decreased = false;
       }
+    },
+    mw_trac_balance(newVal, oldVal) {
+      if (newVal.toString() !== oldVal.toString() && oldVal !== 0) {
+        if (newVal.toString() > oldVal.toString()) {
+          this.mw_trac_balance_increased = true;
+          setTimeout(() => {
+            this.mw_trac_balance_increased = false;
+          }, 3000);
+        } else {
+          this.mw_trac_balance_decreased = true;
+          setTimeout(() => {
+            this.mw_trac_balance_decreased = false;
+          }, 3000);
+        }
+      } else {
+        this.mw_trac_balance_increased = false;
+        this.mw_trac_balance_decreased = false;
+      }
+    },
+    mw_eth_balance(newVal, oldVal) {
+      if (newVal.toString() !== oldVal.toString() && oldVal !== 0) {
+        if (newVal.toString() > oldVal.toString()) {
+          this.mw_eth_balance_increased = true;
+          setTimeout(() => {
+            this.mw_eth_balance_increased = false;
+          }, 3000);
+        } else {
+          this.mw_eth_balance_decreased = true;
+          setTimeout(() => {
+            this.mw_eth_balance_decreased = false;
+          }, 3000);
+        }
+      } else {
+        this.mw_eth_balance_increased = false;
+        this.mw_eth_balance_decreased = false;
+      }
+    },
+    ow_eth_balance(newVal, oldVal) {
+      if (newVal.toString() !== oldVal.toString() && oldVal !== 0) {
+        if (newVal.toString() > oldVal.toString()) {
+          this.ow_eth_balance_increased = true;
+          setTimeout(() => {
+            this.ow_eth_balance_increased = false;
+          }, 3000);
+        } else {
+          this.ow_eth_balance_decreased = true;
+          setTimeout(() => {
+            this.ow_eth_balance_decreased = false;
+          }, 3000);
+        }
+      } else {
+        this.ow_eth_balance_increased = false;
+        this.ow_eth_balance_decreased = false;
+      }
+    },
+    management_wallet(newVal, oldVal) {
+      const erc = window.eth.contract(window.erc725Abi).at(this.erc725);
+
+      const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
+      keccakContract.keccakAddress(newVal).then((response) => {
+        const responseArray = Object.values(response);
+        const wallet = responseArray[0];
+
+        erc.getKeysByPurpose(1).then((result) => {
+          const keys = result.keys;
+          const isValid = keys.includes(wallet);
+
+          if (!isValid) {
+            this.$message.error({
+              message: 'This wallet is not registered as a management wallet, please change it in MetaMask!',
+              duration: 7000,
+            });
+          }
+        });
+      });
     },
   },
   computed: {
@@ -179,11 +287,23 @@ export default {
     background-color: #220F50;
     color: white;
   }
-  .balance-row  div:nth-child(2) {
+
+  .balance-row div:nth-child(2) {
     transition: 1s color;
   }
+
   .changed div:nth-child(2) {
-    color:red;
+    color: red;
+    transition: 1s color;
+  }
+
+  .increased div:nth-child(2) {
+    color: #14da9e;
+    transition: 1s color;
+  }
+
+  .decreased div:nth-child(2) {
+    color: red;
     transition: 1s color;
   }
 

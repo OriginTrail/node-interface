@@ -112,11 +112,11 @@ export default {
   name: 'app',
   data() {
     return {
-      erc_identity: '',
+      erc_identity: '0x283270758FcB45b1DF1C760D0Bc2801F39846b18',
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
-      operational_wallet: '',
+      operational_wallet: '0xeBeF83A03F87d810234Dd1BbDfa75EE3322929e4',
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
@@ -181,27 +181,34 @@ export default {
         color: #2c3e50;
     }
 
-    .logo {
-        margin-top: 13px;
+  .logo {
+    margin-top: 13px;
 
-    }
+  }
+  .el-aside {
+     text-align: left;
+  }
+  .panel {
+    background-color: #f3f3f3;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
 
-    .el-aside {
-        text-align: left;
-    }
+  .panel-form {
+    width: 400px;
+    margin: 100px auto;
+  }
 
-    .panel {
-        background-color: #f3f3f3;
-        margin: 10px;
-        padding: 10px 20px;
-        border-radius: 8px;
-    }
+  .el-message-box {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  }
 
-    .el-message-box {
-        font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    }
+  .el-popover {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  }
 
-    .el-popover {
-        font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    }
+  .el-message__content {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  }
 </style>
