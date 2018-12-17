@@ -45,7 +45,7 @@
 </template>
 <script>
 export default {
-  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_mobile_wallet'],
+  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input'],
   name: 'Balances',
   data() {
     return {
@@ -109,8 +109,8 @@ export default {
     setInterval(() => {
       this.getAllBalances();
     }, 10000);
-    if (screen.width <= 770 && this.management_mobile_wallet != '') {
-      this.management_wallet = this.management_mobile_wallet;
+    if (screen.width <= 770 && this.management_wallet_input != '') {
+      this.management_wallet = this.management_wallet_input;
     }
   },
   methods: {

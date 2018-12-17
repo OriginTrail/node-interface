@@ -16,7 +16,7 @@
                             :erc725="erc_identity"
                             :operational-wallet="operational_wallet"
                             :token-address="token_contract"
-                            :management_mobile_wallet="management_mobile_wallet"
+                            :management_wallet_input="management_wallet_input"
                     ></balances>
                 </el-aside>
                 <el-main v-loading="loading"
@@ -55,7 +55,7 @@
                             :erc725="erc_identity"
                             :operational-wallet="operational_wallet"
                             :token-address="token_contract"
-                            :management_mobile_wallet="management_mobile_wallet"
+                            :management_wallet_input="management_wallet_input"
                     ></balances>
                 </el-main>
             </el-container>
@@ -89,7 +89,7 @@
                                             type="textarea"
                                             :autosize="{ minRows: 1, maxRows: 2}"
                                             resize="none"
-                                            v-model="management_mobile_wallet"></el-input>
+                                            v-model="management_wallet_input"></el-input>
                                 </el-form-item>
             <el-button class="landing-page-button" @click="submitIdentity">Submit</el-button>
                             </el-form>
@@ -112,16 +112,16 @@ export default {
   name: 'app',
   data() {
     return {
-      erc_identity: '0x919d66388b493E0a7f604769039e053460a0C2dd',
+      erc_identity: '',
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
-      operational_wallet: '0x57E3656614f1208bF040264075D725BeD3aE0282',
+      operational_wallet: '',
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
       mobileTrue: false,
-      management_mobile_wallet: '',
+      management_wallet_input: '',
 
     };
   },
@@ -146,7 +146,7 @@ export default {
     window.EventBus.$on('loading-done', () => {
       this.loading = false;
     });
-if (screen.width <= 770) {
+    if (screen.width <= 770) {
       this.mobileTrue = true;
     }
   },
