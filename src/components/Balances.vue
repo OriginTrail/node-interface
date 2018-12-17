@@ -217,7 +217,7 @@ export default {
     setInterval(() => {
       this.getAllBalances();
     }, 10000);
-    if (screen.width <= 770 && this.management_wallet_input != '') {
+    if (screen.width <= 770 && this.management_wallet_input !== '') {
       this.management_wallet = this.management_wallet_input;
     }
   },
@@ -231,7 +231,9 @@ export default {
           console.log(error);
         });
       window.eth.accounts().then((result) => {
-        if (this.management_wallet === '') {
+        if (this.management_wallet_input !== '') {
+          this.management_wallet = this.management_wallet_input;
+        } else {
           this.management_wallet = result[0];
         }
         window.eth.getBalance(this.management_wallet)
