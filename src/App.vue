@@ -1,64 +1,104 @@
 <template>
-  <div id="app">
-    <el-container>
-      <el-header>
+    <div id="app">
         <el-container>
-          <el-aside width="300px">
-            <img alt="OriginTrail" src="./assets/ot-dark_purple.svg" class="logo"></el-aside>
-          <h1 style="padding-left: 10px;">Profile Management Interface</h1>
+            <el-header>
+                <el-container>
+                    <el-aside width="300px">
+                        <img alt="OriginTrail" src="./assets/ot-dark_purple.svg" class="logo">
+                        </el-aside>
+                </el-container>
+            </el-header>
+            <el-container v-if="submitted && !mobileTrue">
+                <el-aside width="300px">
+                    <balances
+                            :profile-storage-address="profile_storage_address"
+                            :profile-address="profile_address"
+                            :erc725="erc_identity"
+                            :operational-wallet="operational_wallet"
+                            :token-address="token_contract"
+                            :management_mobile_wallet="management_mobile_wallet"
+                    ></balances>
+                </el-aside>
+                <el-main v-loading="loading"
+                         :element-loading-text="loading_text">
+                    <el-row>
+                        <el-col :span="12">
+                            <deposit-eth :operational-wallet="operational_wallet"></deposit-eth>
+                        </el-col>
+                        <el-col :span="12">
+                            <deposit-tokens
+                                    :profile-address="profile_address"
+                                    :token-address="token_contract"
+                                    :erc725="erc_identity">
+                            </deposit-tokens>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <withdraw
+                                    :erc725="erc_identity"
+                                    :profile-address="profile_address"
+                            ></withdraw>
+                        </el-col>
+                        <el-col :span="12">
+                            <manage-wallets
+                                    :erc725="erc_identity"></manage-wallets>
+                        </el-col>
+                    </el-row>
+                </el-main>
+            </el-container>
+            <el-container v-else-if="submitted && mobileTrue">
+                <el-main >
+                    <balances
+                            :profile-storage-address="profile_storage_address"
+                            :profile-address="profile_address"
+                            :erc725="erc_identity"
+                            :operational-wallet="operational_wallet"
+                            :token-address="token_contract"
+                            :management_mobile_wallet="management_mobile_wallet"
+                    ></balances>
+                </el-main>
+            </el-container>
+            <el-container v-else>
+                <el-main>
+                    <div class="landing-page-form-wrapper">
+                        <h1>Profile Management Interface</h1>
+                        <div class="landing-page-inner-wrapper">
+                            <el-form>
+                                <el-form-item label="Please enter your ERC725 identity">
+                                    <el-input type="textarea"
+                                              :autosize="{ minRows: 1, maxRows: 2}"
+                                              resize="none"
+                                              v-model="erc_identity"></el-input>
+                                </el-form-item>
+                                <el-form-item label="Please enter your operational wallet address">
+                                    <el-input
+                                            minlength="42"
+                                            maxlength="42"
+                                            type="textarea"
+                                            :autosize="{ minRows: 1, maxRows: 2}"
+                                            resize="none"
+                                            v-model="operational_wallet"></el-input>
+                                </el-form-item>
+                                <el-form-item
+                                        v-if="mobileTrue"
+                                        label="Please enter your management wallet address">
+                                    <el-input
+                                            maxlength="42"
+                                            minlength="42"
+                                            type="textarea"
+                                            :autosize="{ minRows: 1, maxRows: 2}"
+                                            resize="none"
+                                            v-model="management_mobile_wallet"></el-input>
+                                </el-form-item>
+            <el-button class="landing-page-button" @click="submitIdentity">Submit</el-button>
+                            </el-form>
+                        </div>
+                    </div>
+                </el-main>
+            </el-container>
         </el-container>
-      </el-header>
-      <el-container v-if="submitted">
-        <el-aside width="300px">
-          <balances
-            :profile-storage-address="profile_storage_address"
-            :profile-address="profile_address"
-            :erc725="erc_identity"
-            :operational-wallet="operational_wallet"
-            :token-address="token_contract"
-          ></balances>
-        </el-aside>
-        <el-main v-loading="loading"
-                 :element-loading-text="loading_text">
-          <el-row>
-            <el-col :span="12">
-              <deposit-eth :operational-wallet="operational_wallet"></deposit-eth>
-            </el-col>
-            <el-col :span="12">
-              <deposit-tokens
-                :profile-address="profile_address"
-                :token-address="token_contract"
-                :erc725="erc_identity">
-              </deposit-tokens>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12"><withdraw
-              :erc725="erc_identity"
-              :profile-address="profile_address"
-            ></withdraw></el-col>
-            <el-col :span="12"><manage-wallets
-              :erc725="erc_identity"></manage-wallets></el-col>
-          </el-row>
-        </el-main>
-      </el-container>
-      <el-container v-else>
-        <el-main>
-          <el-form>
-            <el-form-item label="Please enter your ERC725 identity">
-              <el-input v-model="erc_identity"></el-input>
-            </el-form-item>
-
-            <el-form-item label="Please enter your operational wallet address">
-              <el-input v-model="operational_wallet"></el-input>
-            </el-form-item>
-
-            <el-button @click="submitIdentity">Submit</el-button>
-          </el-form>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -80,6 +120,9 @@ export default {
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
+      mobileTrue: false,
+      management_mobile_wallet: '',
+
     };
   },
   mounted() {
@@ -103,6 +146,9 @@ export default {
     window.EventBus.$on('loading-done', () => {
       this.loading = false;
     });
+if (screen.width <= 770) {
+      this.mobileTrue = true;
+    }
   },
   methods: {
     submitIdentity() {
@@ -124,33 +170,38 @@ export default {
 </script>
 
 <style lang="scss">
-  #app {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
 
-  .logo {
-    margin-top: 13px;
+    @import "./scss/landig-page";
 
-  }
-  .el-aside {
-     text-align: left;
-  }
-  .panel {
-    background-color: #f3f3f3;
-    margin: 10px;
-    padding: 10px 20px;
-    border-radius: 8px;
-  }
+    #app {
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+    }
 
-  .el-message-box {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  }
+    .logo {
+        margin-top: 13px;
 
-  .el-popover {
-    font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  }
+    }
+
+    .el-aside {
+        text-align: left;
+    }
+
+    .panel {
+        background-color: #f3f3f3;
+        margin: 10px;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+
+    .el-message-box {
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    }
+
+    .el-popover {
+        font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    }
 </style>
