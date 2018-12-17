@@ -65,7 +65,6 @@ export default {
   name: 'Balances',
   data() {
     return {
-      erc_identity: '0x50069ef13456ca8856fe1b9e3ec1a6e12ad037a6',
       ow_eth_balance: 0,
       mw_eth_balance: 0,
       mw_trac_balance: 0,
@@ -170,7 +169,7 @@ export default {
       }
     },
     management_wallet(newVal, oldVal) {
-      const erc = window.eth.contract(window.erc725Abi).at(this.erc_identity);
+      const erc = window.eth.contract(window.erc725Abi).at(this.erc725);
 
       const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
       keccakContract.keccakAddress(newVal).then((response) => {

@@ -72,11 +72,11 @@ export default {
   name: 'app',
   data() {
     return {
-      erc_identity: '0x50069ef13456ca8856fe1b9e3ec1a6e12ad037a6',
+      erc_identity: '',
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
-      operational_wallet: '0xeBeF83A03F87d810234Dd1BbDfa75EE3322929e4',
+      operational_wallet: '',
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
