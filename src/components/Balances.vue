@@ -143,7 +143,6 @@ export default {
           });
       });
 
-
       const profileStorageContract = window.eth.contract(window.profileStorageAbi)
         .at(this.profileStorageAddress);
 
