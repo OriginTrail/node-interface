@@ -58,7 +58,7 @@ export default {
     add() {
       const ercContract = window.eth.contract(window.erc725Abi).at(this.erc725);
       const arr = (this.selected_wallet_type === 'mv') ? [1, 2, 3, 4] : [2, 4];
-      const keccakContract = window.eth.contract(window.keccakAbi).at('0x7aa09d1885483d2285d88fd0f489f86a9350d1ed');
+      const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
       keccakContract.keccakAddress(this.walletToAdd)
         .then((walletToAdd) => {
           ercContract.addKey(walletToAdd[0], arr, 1,
