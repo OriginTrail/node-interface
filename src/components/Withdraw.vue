@@ -31,6 +31,10 @@ export default {
       // eslint-disable-next-line
       this.wallet = result[0];
     });
+
+    window.EventBus.$on('management_wallet_changed', (managementWallet) => {
+      this.wallet = managementWallet;
+    });
   },
   data() {
     return {
