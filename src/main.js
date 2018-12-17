@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import * as profileAbi from './abi/profile.json';
