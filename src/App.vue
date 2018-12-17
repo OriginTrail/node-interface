@@ -44,7 +44,7 @@
       </el-container>
       <el-container v-else>
         <el-main>
-          <el-form>
+          <el-form class="panel panel-form">
             <el-form-item label="Please enter your ERC725 identity">
               <el-input v-model="erc_identity"></el-input>
             </el-form-item>
@@ -72,11 +72,11 @@ export default {
   name: 'app',
   data() {
     return {
-      erc_identity: '0x919d66388b493E0a7f604769039e053460a0C2dd',
+      erc_identity: '0x50069ef13456ca8856fe1b9e3ec1a6e12ad037a6',
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
-      operational_wallet: '0x57E3656614f1208bF040264075D725BeD3aE0282',
+      operational_wallet: '0xeBeF83A03F87d810234Dd1BbDfa75EE3322929e4',
       submitted: 0,
       loading_text: 'Transaction in progress. Please wait for transaction to finish.',
       loading: false,
@@ -146,11 +146,20 @@ export default {
     border-radius: 8px;
   }
 
+  .panel-form {
+    width: 400px;
+    margin: 100px auto;
+  }
+
   .el-message-box {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
   }
 
   .el-popover {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif;
+  }
+
+  .el-message__content {
     font-family: 'Roboto', Helvetica, Arial, sans-serif;
   }
 </style>

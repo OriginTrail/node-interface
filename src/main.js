@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import ElementUI from 'element-ui';
-import VueCountdown from '@chenfengyuan/vue-countdown';
 import App from './App.vue';
 import 'element-ui/lib/theme-chalk/index.css';
 
 import Utilities from './Utilities';
 
-Vue.component(VueCountdown.name, VueCountdown);
 window.Utilities = Utilities;
 
 window.Eth = require('ethjs');
@@ -2358,7 +2356,7 @@ window.keccakAbi = [
   },
 ];
 
-window.hubAddress = '0x55c7a87Bc7A209eFa26787093d52Ca424d74658d';
+window.hubAddress = '0x28faef33F88FcEB2493567Ed4388C59801842870';
 window.keccakAddress = '0x7aa09d1885483d2285d88fd0f489f86a9350d1ed';
 
 
