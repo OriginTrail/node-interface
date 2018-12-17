@@ -1,3 +1,4 @@
+
 import Vue from 'vue';
 import ElementUI from 'element-ui';
 import * as profileAbi from './abi/profile.json';
@@ -27,13 +28,13 @@ window.keccakAddress = '0x7aa09d1885483d2285d88fd0f489f86a9350d1ed';
 
 
 Vue.use(ElementUI);
-if (typeof web3 !== 'undefined') {
+if (typeof web3 !== 'undefined' && screen.width > 770) {
   // eslint-disable-next-line
-  window.eth = new window.Eth(web3.currentProvider);
-} else {
-  // alert('Please install Metamask');
-
+    window.eth = new window.Eth(web3.currentProvider);
+} else if (screen.width <= 770) {
   window.eth = new window.Eth(new window.Eth.HttpProvider('https://rinkeby.infura.io/1WRiEqAQ9l4SW6fGdiDt'));
+} else {
+  alert('Please install Metamask');
 }
 window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);
 

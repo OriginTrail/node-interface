@@ -61,7 +61,7 @@
 </template>
 <script>
 export default {
-  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress'],
+  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input'],
   name: 'Balances',
   data() {
     return {
@@ -217,6 +217,9 @@ export default {
     setInterval(() => {
       this.getAllBalances();
     }, 10000);
+    if (screen.width <= 770 && this.management_wallet_input != '') {
+      this.management_wallet = this.management_wallet_input;
+    }
   },
   methods: {
     getAllBalances() {
@@ -228,7 +231,9 @@ export default {
           console.log(error);
         });
       window.eth.accounts().then((result) => {
-        this.management_wallet = result[0];
+        if (this.management_wallet === '') {
+          this.management_wallet = result[0];
+        }
         window.eth.getBalance(this.management_wallet)
           .then((result) => {
             this.mw_eth_balance = Math.round(window.Eth.fromWei(result, 'ether') * 1000) / 1000;
