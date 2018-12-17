@@ -126,7 +126,6 @@ export default {
         if (this.management_wallet === '') {
           this.management_wallet = result[0];
         }
-        console.log(this.management_wallet);
         window.eth.getBalance(this.management_wallet)
           .then((result) => {
             this.mw_eth_balance = Math.round(window.Eth.fromWei(result, 'ether') * 1000) / 1000;

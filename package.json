@@ -10,8 +10,7 @@
   "dependencies": {
     "element-ui": "^2.4.11",
     "ethjs": "^0.4.0",
-    "vue": "^2.5.17",
-    "vue-device-detector": "github:weilbith/vue-device-detector"
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",
