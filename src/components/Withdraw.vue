@@ -19,7 +19,7 @@ The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep i
                          :step="0.01" :min="0"></el-input-number>
       </el-form-item>
       <el-button @click="startTokenWithdrawal">Tokens Withdrawal</el-button>
-      <!--<el-button @click="withdrawTokens">Withdraw Tokens</el-button>-->
+      <el-button @click="withdrawTokens">Withdraw Tokens</el-button>
     </el-form>
   </div>
 </template>
@@ -30,6 +30,10 @@ export default {
     window.eth.accounts().then((result) => {
       // eslint-disable-next-line
       this.wallet = result[0];
+    });
+
+    window.EventBus.$on('management_wallet_changed', (managementWallet) => {
+      this.wallet = managementWallet;
     });
   },
   data() {

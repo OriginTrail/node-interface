@@ -11,7 +11,7 @@ This is the OriginTrail web interface to manage your node tokens and ether as we
 - *Deposit TRAC tokens* to your profile
 - *Withdraw* earned token from your profile to your Management wallet
 
-This is the Open Source project and you are welcome to contribute. Furthermore, you may use it from our website [https://node-profile.origintrail.io/](https://node-profile.origintrail.io/) or you can download the project and run it locally. 
+This is the Open Source project and you are welcome to contribute. Furthermore, you may use it from our website [https://node-profile.origintrail.io/](https://node-profile.origintrail.io/) or you can download the project and run it locally.  
 
 ## Project setup
 ```

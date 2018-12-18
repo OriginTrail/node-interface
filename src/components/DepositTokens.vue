@@ -27,6 +27,10 @@ export default {
     window.eth.accounts().then((result) => {
       this.wallet = result[0];
     });
+
+    window.EventBus.$on('management_wallet_changed', (managementWallet) => {
+      this.wallet = managementWallet;
+    });
   },
   data() {
     return {
