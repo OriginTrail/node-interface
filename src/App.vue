@@ -66,10 +66,13 @@
                         <div class="landing-page-inner-wrapper">
                             <el-form>
                                 <el-form-item label="Please enter your ERC725 identity">
-                                    <el-input type="textarea"
-                                              :autosize="{ minRows: 1, maxRows: 2}"
-                                              resize="none"
-                                              v-model="erc_identity"></el-input>
+                                    <el-input
+                                            minlength="42"
+                                            maxlength="42"
+                                            type="textarea"
+                                            :autosize="{ minRows: 1, maxRows: 2}"
+                                            resize="none"
+                                            v-model="erc_identity"></el-input>
                                 </el-form-item>
                                 <el-form-item label="Please enter your operational wallet address">
                                     <el-input
