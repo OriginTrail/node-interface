@@ -158,7 +158,7 @@ export default {
     window.EventBus.$on('loading-done', () => {
       this.loading = false;
     });
-    if (screen.width <= 770) {
+    if (window.screen.width <= 770) {
       this.mobileTrue = true;
     }
   },

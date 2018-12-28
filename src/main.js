@@ -27,10 +27,10 @@ window.keccakAddress = '0x7e1bbcd25507a6fcb6503a5be75795848dca32b7';
 
 
 Vue.use(ElementUI);
-if (typeof web3 !== 'undefined' && screen.width > 770) {
+if (typeof web3 !== 'undefined' && window.screen.width > 770) {
   // eslint-disable-next-line
     window.eth = new window.Eth(web3.currentProvider);
-} else if (screen.width <= 770) {
+} else if (window.screen.width <= 770) {
   window.eth = new window.Eth(new window.Eth.HttpProvider('https://rinkeby.infura.io/1WRiEqAQ9l4SW6fGdiDt'));
 } else {
   alert('Please install Metamask');
