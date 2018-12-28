@@ -35,9 +35,13 @@ if (typeof web3 !== 'undefined' && window.screen.width > 770) {
 } else {
   alert('Please install Metamask');
 }
-window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);
+try {
+  window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);
+  window.ethereum.enable();
+} catch (err) {
+  console.log(err);
+}
 
-window.ethereum.enable();
 
 Vue.config.productionTip = false;
 
