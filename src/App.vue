@@ -64,28 +64,27 @@
                     <div class="landing-page-form-wrapper">
                         <h1>Profile Management Interface</h1>
                         <div class="landing-page-inner-wrapper">
-                            <el-form :model="form" :rules="rules" ref="form">
+                            <el-form  >
                                 <el-form-item label="Please enter your ERC725 identity"
-                                              prop="erc_identity">
+                                             >
                                     <el-input
                                             type="textarea"
                                             :autosize="{ minRows: 1, maxRows: 2}"
                                             resize="none"
-                                            v-model="form.erc_identity"></el-input>
+                                            v-model="erc_identity"></el-input>
                                 </el-form-item>
                                 <el-form-item label="Please enter your operational wallet address"
-                                prop="operational_wallet"
                                 >
                                     <el-input
                                             type="textarea"
                                             :autosize="{ minRows: 1, maxRows: 2}"
                                             resize="none"
-                                            v-model="form.operational_wallet"></el-input>
+                                            v-model="operational_wallet"></el-input>
                                 </el-form-item>
                                 <el-form-item
                                         v-if="mobileTrue"
                                         label="Please enter your management wallet address"
-                                        prop="management_wallet_input"
+
                                 >
                                     <el-input
                                             maxlength="42"
@@ -116,10 +115,6 @@ export default {
   name: 'app',
   data() {
     return {
-      form: {
-        erc_identity: '',
-        operational_wallet: '',
-      },
       token_contract: '',
       profile_address: '',
       profile_storage_address: '',
@@ -128,6 +123,8 @@ export default {
       loading: false,
       mobileTrue: false,
       management_wallet_input: '',
+      erc_identity: '',
+      operational_wallet: '',
 
 
       rules: {
@@ -148,11 +145,11 @@ export default {
     console.log(localStorage.getItem('erc_identity'), 'erc_identity');
 
     if (localStorage.getItem('erc_identity') !== null) {
-      this.form.erc_identity = localStorage.getItem('erc_identity');
+      this.erc_identity = localStorage.getItem('erc_identity');
     }
 
     if (localStorage.getItem('operational_wallet') !== null) {
-      this.form.operational_wallet = localStorage.getItem('operational_wallet');
+      this.operational_wallet = localStorage.getItem('operational_wallet');
     }
     window.hub.tokenAddress().then((result) => {
       this.token_contract = result[0];
@@ -187,13 +184,10 @@ export default {
       //   console.log(result);
       // });
 
-      this.$refs.form.validate((valid) => {
-        if (valid === true) {
-          localStorage.setItem('erc_identity', this.form.erc_identity);
-          localStorage.setItem('operational_wallet', this.form.operational_wallet);
-          this.submitted = 1;
-        }
-      });
+
+      localStorage.setItem('erc_identity', this.erc_identity);
+      localStorage.setItem('operational_wallet', this.operational_wallet);
+      this.submitted = 1;
     },
   },
   components: {
