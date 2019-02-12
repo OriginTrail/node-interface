@@ -126,8 +126,6 @@ export default {
     };
   },
   mounted() {
-    console.log(localStorage.getItem('erc_identity'), 'erc_identity');
-
     if (localStorage.getItem('erc_identity') !== null) {
       this.erc_identity = localStorage.getItem('erc_identity');
     }
@@ -135,6 +133,7 @@ export default {
     if (localStorage.getItem('operational_wallet') !== null) {
       this.operational_wallet = localStorage.getItem('operational_wallet');
     }
+
     window.hub.tokenAddress().then((result) => {
       this.token_contract = result[0];
     });
