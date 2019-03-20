@@ -23,7 +23,7 @@ window.profileStorageAbi = profileStorageAbi.default;
 window.keccakAbi = keccakAbi.default;
 
 window.hubAddress = '0x0e5995FE34BfC9DB7a31fa318f7f1256Cf28FfCa';
-window.keccakAddress = '0xfd010324268fec8868c663ce2cde2de8cb7d832a';
+window.keccakAddress = '0x53F5b26EB263B96ffA83468F78DA738a3961644A';
 
 
 Vue.use(ElementUI);

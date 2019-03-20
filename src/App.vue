@@ -150,15 +150,15 @@ export default {
       this.operational_wallet = localStorage.getItem('operational_wallet');
     }
 
-    window.hub.tokenAddress().then((result) => {
+    window.hub.getContractAddress('Token').then((result) => {
       this.token_contract = result[0];
     });
 
-    window.hub.profileAddress().then((result) => {
+    window.hub.getContractAddress('Profile').then((result) => {
       this.profile_address = result[0];
     });
 
-    window.hub.profileStorageAddress().then((result) => {
+    window.hub.getContractAddress('ProfileStorage').then((result) => {
       this.profile_storage_address = result[0];
     });
 
