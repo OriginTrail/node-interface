@@ -31,7 +31,7 @@ if (typeof web3 !== 'undefined' && window.screen.width > 770) {
   // eslint-disable-next-line
     window.eth = new window.Eth(web3.currentProvider);
 } else if (window.screen.width <= 770) {
-  window.eth = new window.Eth(new window.Eth.HttpProvider('https://rinkeby.infura.io/1WRiEqAQ9l4SW6fGdiDt'));
+  window.eth = new window.Eth(new window.Eth.HttpProvider('http://mainnet.infura.io/v3/def2d041b9f640cd8211d415060b72b7'));
 } else {
   alert('Please install Metamask');
 }
