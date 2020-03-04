@@ -14,12 +14,16 @@ This approach is taken as a convenience measure to provide for flexibility with 
 You can use this interface to manage your wallets (add/remove both). IMPORTANT NOTE: Only use this interface if you know what you are doing! With improper use, your node can stop operating and you can loose your rewards!">
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
-    <span>Add/Remove wallets (Management & Operational)</span>
+    <p class="explanation-text">Add/Remove wallets (Management & Operational)</p>
+
+    <p class="explanation-text">
+      Note: You cannot remove a management wallet if you only have one associated with your node. To change your existing management wallet, first add a new one and then proceed with removing the old wallet.
+    </p>
     <el-form>
-      <el-form-item label="Please enter wallet">
-        <el-input v-model="walletToAdd"></el-input>
-      </el-form-item>
-      <el-form-item label="Wallet type to manage">
+      <el-form-item>
+        <p class="label">
+          Wallet type to manage
+        </p>
         <el-select v-model="selected_wallet_type" placeholder="Select" clearable>
           <el-option
             v-for="item in options"
@@ -29,8 +33,12 @@ You can use this interface to manage your wallets (add/remove both). IMPORTANT N
           </el-option>
         </el-select>
       </el-form-item>
-      <el-button @click="add">Add Wallet</el-button>
-      <el-button @click="remove">Remove Wallet</el-button>
+      <el-form-item>
+        <p class="label">Enter wallet</p>
+        <el-input v-model="walletToAdd"></el-input>
+      </el-form-item>
+      <el-button @click="add" class="profile-btn">ADD WALLET</el-button>
+      <el-button @click="remove" class="profile-btn-white">REMOVE WALLET</el-button>
     </el-form>
 
   </div>
@@ -87,9 +95,27 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped lang="scss">
   .full {
     width: 100%;
+  }
+
+  .profile-btn{
+    background-color: #1d2667;
+    color: #ffffff;
+    border: #1d2667;
+  &:hover{
+     background-color: #1d2667;
+     color: #ffffff;
+     border: #1d2667;
+     opacity: .8;
+   }
+  &:focus{
+     background-color: #1d2667;
+     color: #ffffff;
+     border: #1d2667;
+     opacity: .8;
+   }
   }
 
   .el-select-dropdown__item {

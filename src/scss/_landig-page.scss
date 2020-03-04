@@ -2,6 +2,49 @@
 
 $roboto: 'Roboto', sans-serif;
 
+body{
+  background-color: #f6f6f6;
+}
+
+.label{
+  line-height: 10px;
+}
+
+.el-input-number{
+  margin-top: -10px;
+}
+
+.profile-btn{
+  background-color: #1d2667;
+  color: #ffffff;
+  border: #1d2667;
+  transition: .2s all;
+  &:hover{
+    background-color: #1d2667;
+    color: #ffffff;
+    border: #1d2667;
+
+  }
+  &:focus{
+    background-color: #1d2667;
+    color: #ffffff;
+    border: #1d2667;
+
+  }
+}
+
+.explanation-text{
+  margin-bottom: 30px;
+}
+
+.el-header {
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
 .landing-page-form-wrapper{
   width: 100%;
   max-width: 480px;

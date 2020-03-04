@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <h1>Deposit ETH <el-popover
+    <h1>Deposit ETH to your Node <el-popover
       placement="top-start"
       title="Deposit ETH"
       width="300"
@@ -8,16 +8,17 @@
       content="ETH is required for your node to be able to publish transactions to the blockchain, which is handled by your node's operational wallet. This is mostly needed if you want to publish data sets on the network (as a DC node), but sometimes also required as a DH node. It is recommended to always have around 0.1 ETH on the node operational wallet.">
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
-    <span>Deposit ETH to your Operational Wallet</span>
+    <p class="explanation-text">This will tranfer ETH to your operational wallet.</p>
     <el-form :rules="rules" ref="formData" :model="formData">
       <el-form-item label="Wallet to deposit from (i.e. Management wallet)">
         <el-input v-model="wallet"></el-input>
       </el-form-item>
-      <el-form-item label="Please enter amount to deposit">
+      <el-form-item>
+        <p class="label">Please enter amount to deposit</p>
         <el-input-number v-model="formData.amount"
                          :precision="3" :step="0.01" :min="0"></el-input-number>
       </el-form-item>
-      <el-button @click="depositEth">Deposit ETH</el-button>
+      <el-button @click="depositEth" class="profile-btn">DEPOSIT ETH</el-button>
     </el-form>
   </div>
 </template>
@@ -73,6 +74,22 @@ export default {
   },
 };
 </script>
-<style>
-
+<style scoped lang="scss">
+  .profile-btn{
+    background-color: #1d2667;
+    color: #ffffff;
+    border: #1d2667;
+    &:hover{
+      background-color: #1d2667;
+      color: #ffffff;
+      border: #1d2667;
+      opacity: .8;
+    }
+    &:focus{
+      background-color: #1d2667;
+      color: #ffffff;
+      border: #1d2667;
+      opacity: .8;
+    }
+  }
 </style>
