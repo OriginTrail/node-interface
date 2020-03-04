@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <h1>Withdraw TRAC <el-popover
+    <h1>Withdraw TRAC from your Node <el-popover
       placement="top-start"
       title="Withdraw TRAC"
       width="300"
@@ -9,17 +9,25 @@
 The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep in mind that if you withdraw all TRAC available, your node will not be able to respond to new offers because it will not be able to stake TRAC for the job. We recommend to always have some unlocked TRAC on the profile so that your node can receive new jobs.">
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
-    <span>Withdraw TRAC from your Profile</span>
+    <p class="explanation-text">This will withdraw TRAC from your ODN node profile.</p>
     <el-form>
-      <el-form-item label="Wallet to withdraw to - Management wallet">
+      <p class="label">Wallet to withdraw to - Management wallet</p>
+      <el-form-item>
         <el-input v-model="wallet" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="Please enter amount to withdraw">
+      <el-form-item>
+        <p class="label">Amount to withdraw</p>
         <el-input-number v-model="amount" :precision="3"
                          :step="0.01" :min="0"></el-input-number>
       </el-form-item>
-      <el-button @click="startTokenWithdrawal">Tokens Withdrawal</el-button>
-      <el-button @click="withdrawTokens">Withdraw Tokens</el-button>
+      <el-button @click="startTokenWithdrawal" class="profile-btn">START WITHDRAWAL</el-button>
+
+        <el-button @click="withdrawTokens" class="profile-btn-white">FINISH WITHDRAWAL</el-button>
+      <el-tooltip class="item btn-tooltip" effect="dark" content="START WITHDRAWAL button will execute 2 blockchain transactions. If the second transaction fails, you can use this button to start it again. Use this button only for the second transaction." placement="top">
+      <i class="el-icon-info"></i>
+      </el-tooltip>
+
+
     </el-form>
   </div>
 </template>
@@ -94,3 +102,29 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+  .profile-btn{
+    background-color: #1d2667;
+    color: #ffffff;
+    border: #1d2667;
+    &:hover{
+      background-color: #1d2667;
+      color: #ffffff;
+      border: #1d2667;
+      opacity: .8;
+    }
+    &:focus{
+      background-color: #1d2667;
+      color: #ffffff;
+      border: #1d2667;
+      opacity: .8;
+    }
+  }
+  .profile-btn-white{
+    margin-right: 10px;
+  }
+  .btn-tooltip{
+    font-size: 22px;
+  }
+</style>

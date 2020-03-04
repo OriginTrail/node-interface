@@ -8,7 +8,11 @@
                         </el-aside>
                 </el-container>
             </el-header>
+
+          <introduction v-if="submitted && !mobileTrue"></introduction>
+
             <el-container v-if="submitted && !mobileTrue">
+
                 <el-aside width="300px">
                     <balances
                             :profile-storage-address="profile_storage_address"
@@ -110,6 +114,9 @@ import DepositEth from './components/DepositEth.vue';
 import DepositTokens from './components/DepositTokens.vue';
 import Withdraw from './components/Withdraw.vue';
 import ManageWallets from './components/ManageWallets.vue';
+import Header from './components/Header.vue';
+import Introduction from './components/Introduction';
+
 
 export default {
   name: 'app',
@@ -191,6 +198,8 @@ export default {
     },
   },
   components: {
+    Introduction,
+    Header,
     Balances,
     DepositEth,
     DepositTokens,
@@ -220,10 +229,12 @@ export default {
      text-align: left;
   }
   .panel {
-    background-color: #f3f3f3;
+    text-align: left;
+    background-color: #ffffff;
     margin: 10px;
     padding: 10px 20px;
     border-radius: 8px;
+    border: 1px solid #dfdfdf;
   }
 
   .panel-form {
