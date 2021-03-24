@@ -26,8 +26,6 @@ The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep i
       <el-tooltip class="item btn-tooltip" effect="dark" content="START WITHDRAWAL button will execute 2 blockchain transactions. If the second transaction fails, you can use this button to start it again. Use this button only for the second transaction." placement="top">
       <i class="el-icon-info"></i>
       </el-tooltip>
-
-
     </el-form>
   </div>
 </template>
@@ -57,7 +55,7 @@ export default {
         callback: () => {
           const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
           profileContract.startTokenWithdrawal(this.erc725, this.prepareNumber(),
-            { from: this.wallet })
+            { from: this.wallet, gas: 500000 })
             .then(async (hash) => {
               window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
               await window.Utilities.getTransactionReceipt(hash);
@@ -85,7 +83,7 @@ export default {
     withdrawTokens() {
       const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
       profileContract.withdrawTokens(this.erc725,
-        { from: this.wallet })
+        { from: this.wallet, gas: 500000 })
         .then(async (hash) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
           await window.Utilities.getTransactionReceipt(hash);

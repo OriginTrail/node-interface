@@ -65,10 +65,30 @@
             </el-container>
             <el-container v-else>
                 <el-main>
+                    <div class="select-blockchain-wrapper">
+                      <div class="blockchain-box" @click="selectNetwork('ETHEREUM')">
+                        <img src="./assets/ethereum.png" alt="">
+                        <h3>Ethereum</h3>
+                        <p>Mainnet</p>
+                      </div>
+
+                      <div class="blockchain-box" @click="selectNetwork('XDAI')">
+                        <img src="./assets/xdai.svg" alt="">
+                        <h3>xDai</h3>
+                        <p>Mainnet</p>
+                      </div>
+
+                      <div class="blockchain-box inactive">
+                        <img src="./assets/starfleet.svg" alt="">
+                        <h3>Starfleer</h3>
+                        <p>Mainnet</p>
+                      </div>
+                    </div>
+
                     <div class="landing-page-form-wrapper">
-                        <h1>Profile Management Interface</h1>
                         <div class="landing-page-inner-wrapper">
-                            <el-form  >
+                            <el-form v-if="selected_network == 'ETHEREUM'">
+                              <h1>Ethereum</h1>
                                 <el-form-item label="Please enter your ERC725 identity"
                                              >
                                     <el-input
@@ -98,8 +118,42 @@
                                             resize="none"
                                             v-model="management_wallet_input"></el-input>
                                 </el-form-item>
-            <el-button class="landing-page-button" @click="submitIdentity">Submit</el-button>
+                              <el-button class="landing-page-button" @click="submitIdentity">CONNECT</el-button>
                             </el-form>
+
+                          <el-form v-if="selected_network == 'XDAI'">
+                            <h1>xDai</h1>
+                            <el-form-item label="Please enter your ERC725 identity"
+                            >
+                              <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="erc_identity"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Please enter your operational wallet address"
+                            >
+                              <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="operational_wallet"></el-input>
+                            </el-form-item>
+                            <el-form-item
+                              v-if="mobileTrue"
+                              label="Please enter your management wallet address"
+
+                            >
+                              <el-input
+                                maxlength="42"
+                                minlength="42"
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="management_wallet_input"></el-input>
+                            </el-form-item>
+                            <el-button class="landing-page-button" @click="submitIdentity">CONNECT</el-button>
+                          </el-form>
                         </div>
                     </div>
                 </el-main>
@@ -132,8 +186,7 @@ export default {
       management_wallet_input: '',
       erc_identity: '',
       operational_wallet: '',
-
-
+      selected_network: '',
       rules: {
         operational_wallet: [
           { required: true, message: 'Please input your operational wallet', trigger: 'blur' },
@@ -184,7 +237,9 @@ export default {
   },
   methods: {
 
-
+    selectNetwork(network) {
+      this.selected_network = network;
+    },
     submitIdentity() {
       // const erc = eth.contract(erc725Abi).at(this.erc_identity);
       // erc.getKeysByPurpose(1).then((result) => {
