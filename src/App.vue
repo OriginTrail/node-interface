@@ -65,20 +65,20 @@
             </el-container>
             <el-container v-else>
                 <el-main>
-                    <div class="select-blockchain-wrapper">
-                      <div class="blockchain-box" @click="selectNetwork('ETHEREUM')">
-                        <img src="./assets/ethereum.png" alt="">
+                    <div class="select-blockchain-wrapper" >
+                      <div class=" ethereum-blockchain-box" @click="selectNetwork('ETHEREUM')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'ETHEREUM' }">
+                        <img src="./assets/ethereum.svg" alt="">
                         <h3>Ethereum</h3>
                         <p>Mainnet</p>
                       </div>
 
-                      <div class="blockchain-box" @click="selectNetwork('XDAI')">
+                      <div class=" xdai-blockchain-box" @click="selectNetwork('XDAI')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'XDAI' }">
                         <img src="./assets/xdai.svg" alt="">
                         <h3>xDai</h3>
                         <p>Mainnet</p>
                       </div>
 
-                      <div class="blockchain-box inactive">
+                      <div class="blockchain-box-disabled">
                         <img src="./assets/starfleet.svg" alt="">
                         <h3>Starfleer</h3>
                         <p>Mainnet</p>
@@ -187,6 +187,7 @@ export default {
       erc_identity: '',
       operational_wallet: '',
       selected_network: '',
+      isActive: false,
       rules: {
         operational_wallet: [
           { required: true, message: 'Please input your operational wallet', trigger: 'blur' },
