@@ -9,7 +9,9 @@
                 </el-container>
             </el-header>
 
-          <introduction v-if="submitted && !mobileTrue"></introduction>
+          <introduction v-if="submitted && !mobileTrue"
+                        :selected_network="selected_network"
+          ></introduction>
 
             <el-container v-if="submitted && !mobileTrue">
 
@@ -21,19 +23,23 @@
                             :operational-wallet="operational_wallet"
                             :token-address="token_contract"
                             :management_wallet_input="management_wallet_input"
+                            :selected_network="selected_network"
                     ></balances>
                 </el-aside>
                 <el-main v-loading="loading"
                          :element-loading-text="loading_text">
                     <el-row>
                         <el-col :span="12">
-                            <deposit-eth :operational-wallet="operational_wallet"></deposit-eth>
+                            <deposit-eth
+                              :operational-wallet="operational_wallet"
+                              :selected_network="selected_network"></deposit-eth>
                         </el-col>
                         <el-col :span="12">
                             <deposit-tokens
                                     :profile-address="profile_address"
                                     :token-address="token_contract"
-                                    :erc725="erc_identity">
+                                    :erc725="erc_identity"
+                                    :selected_network="selected_network">
                             </deposit-tokens>
                         </el-col>
                     </el-row>
@@ -42,11 +48,14 @@
                             <withdraw
                                     :erc725="erc_identity"
                                     :profile-address="profile_address"
+                                    :selected_network="selected_network"
                             ></withdraw>
                         </el-col>
                         <el-col :span="12">
                             <manage-wallets
-                                    :erc725="erc_identity"></manage-wallets>
+                                    :erc725="erc_identity"
+                                    :selected_network="selected_network"
+                            ></manage-wallets>
                         </el-col>
                     </el-row>
                 </el-main>
@@ -60,6 +69,7 @@
                             :operational-wallet="operational_wallet"
                             :token-address="token_contract"
                             :management_wallet_input="management_wallet_input"
+                            :selected_network="selected_network"
                     ></balances>
                 </el-main>
             </el-container>
@@ -170,6 +180,7 @@ import Withdraw from './components/Withdraw.vue';
 import ManageWallets from './components/ManageWallets.vue';
 import Header from './components/Header.vue';
 import Introduction from './components/Introduction';
+import * as hubAbi from './abi/hub.json';
 
 
 export default {
@@ -203,50 +214,62 @@ export default {
     };
   },
   mounted() {
-    console.log(localStorage.getItem('erc_identity'), 'erc_identity');
 
-    if (localStorage.getItem('erc_identity') !== null) {
-      this.erc_identity = localStorage.getItem('erc_identity');
-    }
-
-    if (localStorage.getItem('operational_wallet') !== null) {
-      this.operational_wallet = localStorage.getItem('operational_wallet');
-    }
-    window.hub.tokenAddress().then((result) => {
-      this.token_contract = result[0];
-    });
-
-    window.hub.profileAddress().then((result) => {
-      this.profile_address = result[0];
-    });
-
-    window.hub.profileStorageAddress().then((result) => {
-      this.profile_storage_address = result[0];
-    });
-
-    window.EventBus.$on('loading', (msg) => {
-      this.loading = true;
-      this.loading_text = msg || 'Transaction in progress. Please wait for transaction to finish.';
-    });
-
-    window.EventBus.$on('loading-done', () => {
-      this.loading = false;
-    });
-    if (window.screen.width <= 770) {
-      this.mobileTrue = true;
-    }
   },
   methods: {
 
     selectNetwork(network) {
       this.selected_network = network;
+      if (this.selected_network === 'ETHEREUM') {
+        window.hubAddress = '0x89777F4D16F0a263F47EaD07cbCAb9497861aa79';
+        window.keccakAddress = '0x7e1bbcd25507a6fcb6503a5be75795848dca32b7';
+        window.eth = new window.Eth(new window.Eth.HttpProvider('https://mainnet.infura.io/v3/f8c3858f892d4199840f5354cc954713'));
+      } else if (this.selected_network === 'XDAI') {
+        window.hubAddress = '0xB4Cf5D3876FA929706A87F3B4042C741dcb3d688';
+        window.keccakAddress = '0x470561DB00b4A21A35bD285c3e17e542DCa8B52c';
+        window.eth = new window.Eth(new window.Eth.HttpProvider('https://rpc.xdaichain.com/origintrail/'));
+      }
+
+      window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);
+      window.ethereum.enable();
+
+
+      if (localStorage.getItem('erc_identity') !== null) {
+        this.erc_identity = localStorage.getItem('erc_identity');
+      }
+
+      if (localStorage.getItem('operational_wallet') !== null) {
+        this.operational_wallet = localStorage.getItem('operational_wallet');
+      }
+
+      window.hub.tokenAddress().then((result) => {
+        this.token_contract = result[0];
+        console.log('token_contract:', this.token_contract);
+      });
+
+      window.hub.getContractAddress('Profile').then((result) => {
+        this.profile_address = result[0];
+        console.log('profile_address:', this.profile_address);
+      });
+
+      window.hub.getContractAddress('ProfileStorage').then((result) => {
+        this.profile_storage_address = result[0];
+        console.log('profile_storage_address:', this.profile_storage_address);
+      });
+
+      window.EventBus.$on('loading', (msg) => {
+        this.loading = true;
+        this.loading_text = msg || 'Transaction in progress. Please wait for transaction to finish.';
+      });
+
+      window.EventBus.$on('loading-done', () => {
+        this.loading = false;
+      });
+      if (window.screen.width <= 770) {
+        this.mobileTrue = true;
+      }
     },
     submitIdentity() {
-      // const erc = eth.contract(erc725Abi).at(this.erc_identity);
-      // erc.getKeysByPurpose(1).then((result) => {
-      //   console.log(result);
-      // });
-
 
       localStorage.setItem('erc_identity', this.erc_identity);
       localStorage.setItem('operational_wallet', this.operational_wallet);

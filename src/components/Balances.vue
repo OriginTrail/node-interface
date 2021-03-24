@@ -34,7 +34,8 @@
     ow_eth_balance_decreased ? 'decreased' : '',
     'balance-row'
     ]">
-      <el-col :span="12" class="align-left">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
       <el-col :span="12">{{ow_eth_balance}}</el-col>
     </el-row>
 
@@ -45,7 +46,8 @@
     mw_eth_balance_decreased ? 'decreased' : '',
     'balance-row'
     ]">
-      <el-col :span="12" class="align-left">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
       <el-col :span="12">{{mw_eth_balance}}</el-col>
     </el-row>
 
@@ -61,7 +63,7 @@
 </template>
 <script>
 export default {
-  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input'],
+  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input', 'selected_network'],
   name: 'Balances',
   data() {
     return {

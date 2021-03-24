@@ -23,7 +23,7 @@
 </template>
 <script>
 export default {
-  props: ['profileAddress', 'tokenAddress', 'erc725'],
+  props: ['profileAddress', 'tokenAddress', 'erc725', 'selected_network'],
   mounted() {
     window.eth.accounts().then((result) => {
       this.wallet = result[0];
