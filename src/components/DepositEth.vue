@@ -27,7 +27,7 @@
         <el-input-number v-model="formData.amount"
                          :precision="3" :step="0.01" :min="0"></el-input-number>
       </el-form-item>
-      <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'ETHEREUM'">DEPOSIT xDai</el-button>
+      <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'ETHEREUM'">DEPOSIT ETH</el-button>
       <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'XDAI'">DEPOSIT xDai</el-button>
     </el-form>
   </div>
