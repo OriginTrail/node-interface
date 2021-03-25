@@ -33,10 +33,9 @@ The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep i
 export default {
   props: ['profileAddress', 'erc725'],
   mounted() {
-    window.eth.accounts().then((result) => {
-      // eslint-disable-next-line
-      this.wallet = result[0];
-    });
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
 
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
       this.wallet = managementWallet;

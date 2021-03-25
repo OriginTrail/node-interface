@@ -50,11 +50,17 @@ export default {
     };
   },
   mounted() {
-    window.eth.accounts().then((result) => {
-      this.wallet = result[0];
-    });
+    // window.eth.accounts().then((result) => {
+    //   this.wallet = result[0];
+    // });
+    // window.ethereum.request({ method: 'eth_requestAccounts' });
+
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
 
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
+      console.log('MANAGEMENT WALLET CHANGED');
       this.wallet = managementWallet;
     });
   },

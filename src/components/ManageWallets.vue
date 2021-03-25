@@ -62,9 +62,9 @@ You can use this interface to manage your wallets (add/remove both). IMPORTANT N
 export default {
   props: ['erc725', 'selected_network'],
   mounted() {
-    window.eth.accounts().then((result) => {
-      this.wallet = result[0];
-    });
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
   },
   data() {
     return {

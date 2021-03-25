@@ -232,12 +232,14 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      window.eth.accounts().then((result) => {
+      if (window.ethereum._state.accounts.length > 0) {
+        // this.wallet = window.ethereum._state.accounts[0];
+
         if (this.management_wallet_input !== '') {
           this.management_wallet = this.management_wallet_input;
           window.EventBus.$emit('management_wallet_changed', this.management_wallet);
         } else {
-          this.management_wallet = result[0];
+          this.management_wallet = window.ethereum._state.accounts[0];
           window.EventBus.$emit('management_wallet_changed', this.management_wallet);
         }
         window.eth.getBalance(this.management_wallet)
@@ -255,7 +257,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      });
+      }
+      // window.eth.accounts().then((result) => {
+      //
+      // });
 
       const profileStorageContract = window.eth.contract(window.profileStorageAbi)
         .at(this.profileStorageAddress);

@@ -25,9 +25,9 @@
 export default {
   props: ['profileAddress', 'tokenAddress', 'erc725', 'selected_network'],
   mounted() {
-    window.eth.accounts().then((result) => {
-      this.wallet = result[0];
-    });
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
 
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
       this.wallet = managementWallet;
