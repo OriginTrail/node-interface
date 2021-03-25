@@ -220,6 +220,9 @@ export default {
 
     selectNetwork(network) {
       this.selected_network = network;
+      if (window.ethereum) {
+        window.web3 = new window.Web3(window.ethereum);
+      }
       if (this.selected_network === 'ETHEREUM') {
         window.hubAddress = '0x89777F4D16F0a263F47EaD07cbCAb9497861aa79';
         window.keccakAddress = '0x7e1bbcd25507a6fcb6503a5be75795848dca32b7';

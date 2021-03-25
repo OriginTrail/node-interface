@@ -40,31 +40,35 @@ export default {
     };
   },
   methods: {
-    increaseApproval() {
+    async increaseApproval() {
+      const value = this.prepareNumber().toString();
       this.$alert('This operation will require 2 transactions to blockchain.', 'Important', {
         confirmButtonText: 'OK',
         callback: () => {
-          const tokenContract = window.eth.contract(window.tokenAbi).at(this.tokenAddress);
-          tokenContract.increaseApproval(this.profileAddress, this.prepareNumber(),
-            { from: this.wallet })
-            .then(async (hash) => {
+          const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
+          tokenContract.methods
+            .increaseApproval(this.wallet, value).send({ from: this.wallet }).then(async (hash) => {
               window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
               await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
               window.EventBus.$emit('loading', 'Please approve second transaction');
-              this.depositToken();
+              this.depositToken(value);
+            }).catch((error) => {
+              console.log(error);
             });
         },
       });
     },
-    depositToken() {
-      const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
-      profileContract.depositTokens(this.erc725, this.prepareNumber(),
-        { from: this.wallet })
-        .then(async (hash) => {
+    depositToken(value) {
+      const profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
+
+      profileContract.methods
+        .depositTokens(this.erc725, value).send({ from: this.wallet }).then(async (hash) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
           await window.Utilities.getTransactionReceipt(hash);
           window.EventBus.$emit('loading-done');
+        }).catch((error) => {
+          console.log(error);
         });
     },
     prepareNumber() {

@@ -79,9 +79,20 @@ export default {
   },
   methods: {
     add() {
-      const ercContract = window.eth.contract(window.erc725Abi).at(this.erc725);
+
+      // const profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
+      //
+      // profileContract.methods
+      //   .depositTokens(this.erc725, value).send({ from: this.wallet }).then(async (hash) => {
+      //   window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
+      //   await window.Utilities.getTransactionReceipt(hash);
+      //   window.EventBus.$emit('loading-done');
+      // }).catch((error) => {
+      //   console.log(error);
+      // });
+      const ercContract = new window.web3.eth.Contract(window.erc725Abi, this.erc725);
       const arr = (this.selected_wallet_type === 'mv') ? [1, 2, 3, 4] : [2, 4];
-      const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
+      const keccakContract = new window.web3.eth.Contract(window.keccakAbi, this.keccakAddress);
       keccakContract.keccakAddress(this.walletToAdd)
         .then((walletToAdd) => {
           ercContract.addKey(walletToAdd[0], arr, 1,

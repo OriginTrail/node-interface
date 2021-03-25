@@ -15,6 +15,9 @@ window.Utilities = Utilities;
 
 window.Eth = require('ethjs');
 
+const Web3 = require('web3');
+window.Web3 = Web3;
+
 window.EventBus = new Vue();
 
 window.profileAbi = profileAbi.default;

@@ -52,10 +52,10 @@ export default {
       this.$alert('This operation will require 2 transactions to blockchain. ', 'Important', {
         confirmButtonText: 'OK',
         callback: () => {
-          const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
-          profileContract.startTokenWithdrawal(this.erc725, this.prepareNumber(),
-            { from: this.wallet, gas: 500000 })
-            .then(async (hash) => {
+          const value = this.prepareNumber().toString();
+          const profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
+          profileContract.methods
+            .startTokenWithdrawal(this.erc725, value).send({ from: this.wallet, gas: 500000 }).then(async (hash) => {
               window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
               await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
@@ -73,17 +73,15 @@ export default {
               }, 1000);
               setTimeout(() => {
                 window.EventBus.$emit('loading', 'Please approve second transaction');
-                this.withdrawTokens();
+                this.withdrawTokens(profileContract);
               }, (5 * 65 * 1000));
             });
         },
       });
     },
-    withdrawTokens() {
-      const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
-      profileContract.withdrawTokens(this.erc725,
-        { from: this.wallet, gas: 500000 })
-        .then(async (hash) => {
+    withdrawTokens(profileContract) {
+      profileContract.methods
+        .withdrawTokens(this.erc725).send({ from: this.wallet, gas: 500000 }).then(async (hash) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
           await window.Utilities.getTransactionReceipt(hash);
           window.EventBus.$emit('loading-done');

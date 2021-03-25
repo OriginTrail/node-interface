@@ -66,21 +66,33 @@ export default {
   },
   methods: {
     depositEth() {
+      console.log(window.eth.currentProvider)
       this.$refs.formData.validate((valid) => {
         if (valid) {
-          window.eth.sendTransaction({
-            from: this.wallet,
-            to: this.operationalWallet,
-            value: window.Eth.toWei(this.formData.amount, 'ether'),
-            gas: '3000000',
-            data: '0x',
-          }).then(async (hash) => {
-            window.EventBus.$emit('loading');
-            await window.Utilities.getTransactionReceipt(hash);
-            window.EventBus.$emit('loading-done');
-          }).catch((error) => {
-            console.log(error);
-          });
+          const value = window.Eth.toWei(this.formData.amount, 'ether');
+          window.ethereum
+            .request({
+              method: 'eth_sendTransaction',
+              params: [
+                {
+                  from: this.wallet,
+                  to: this.operationalWallet,
+                  gas: '3000000',
+                  value: value.toNumber(),
+                  data:
+                    '0x',
+                },
+              ],
+            })
+            .then(async (hash) => {
+              window.EventBus.$emit('loading');
+              await window.Utilities.getTransactionReceipt(hash);
+              window.EventBus.$emit('loading-done');
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
         } else {
           console.log('error submit!!');
           return false;
