@@ -79,19 +79,19 @@
                       <div class=" ethereum-blockchain-box" @click="selectNetwork('ETHEREUM')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'ETHEREUM' }">
                         <img src="./assets/ethereum.svg" alt="">
                         <h3>Ethereum</h3>
-                        <p>Mainnet</p>
+                        <p>Click here to manage your node decentralized identity on Ethereum</p>
                       </div>
 
                       <div class=" xdai-blockchain-box" @click="selectNetwork('XDAI')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'XDAI' }">
                         <img src="./assets/xdai.svg" alt="">
                         <h3>xDai</h3>
-                        <p>Mainnet</p>
+                        <p>Click here to manage your node decentralized identity on xDAI</p>
                       </div>
 
                       <div class="blockchain-box-disabled">
                         <img src="./assets/starfleet.svg" alt="">
-                        <h3>Starfleer</h3>
-                        <p>Mainnet</p>
+                        <h3>Starfleet</h3>
+                        <p>Click here to manage your node decentralized identity on Starfleet</p>
                       </div>
                     </div>
 
@@ -236,7 +236,6 @@ export default {
       window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);
       window.ethereum.enable();
 
-
       if (localStorage.getItem('erc_identity') !== null) {
         this.erc_identity = localStorage.getItem('erc_identity');
       }
@@ -247,17 +246,14 @@ export default {
 
       window.hub.tokenAddress().then((result) => {
         this.token_contract = result[0];
-        console.log('token_contract:', this.token_contract);
       });
 
       window.hub.getContractAddress('Profile').then((result) => {
         this.profile_address = result[0];
-        console.log('profile_address:', this.profile_address);
       });
 
       window.hub.getContractAddress('ProfileStorage').then((result) => {
         this.profile_storage_address = result[0];
-        console.log('profile_storage_address:', this.profile_storage_address);
       });
 
       window.EventBus.$on('loading', (msg) => {
@@ -273,7 +269,6 @@ export default {
       }
     },
     submitIdentity() {
-
       localStorage.setItem('erc_identity', this.erc_identity);
       localStorage.setItem('operational_wallet', this.operational_wallet);
       this.submitted = 1;

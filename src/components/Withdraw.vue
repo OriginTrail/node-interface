@@ -36,7 +36,7 @@ export default {
     if (window.ethereum._state.accounts.length > 0) {
       this.wallet = window.ethereum._state.accounts[0];
     }
-
+    this.profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
       this.wallet = managementWallet;
     });
@@ -45,6 +45,7 @@ export default {
     return {
       amount: 0,
       wallet: '',
+      profileContract: null,
     };
   },
   methods: {
@@ -53,11 +54,10 @@ export default {
         confirmButtonText: 'OK',
         callback: () => {
           const value = this.prepareNumber().toString();
-          const profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
-          profileContract.methods
+          window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+          this.profileContract.methods
             .startTokenWithdrawal(this.erc725, value).send({ from: this.wallet, gas: 500000 }).then(async (hash) => {
-              window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
               const countDownDate = new Date().getTime() + (5 * 65 * 1000);
               const x = setInterval(() => {
@@ -73,17 +73,17 @@ export default {
               }, 1000);
               setTimeout(() => {
                 window.EventBus.$emit('loading', 'Please approve second transaction');
-                this.withdrawTokens(profileContract);
+                this.withdrawTokens();
               }, (5 * 65 * 1000));
             });
         },
       });
     },
-    withdrawTokens(profileContract) {
-      profileContract.methods
-        .withdrawTokens(this.erc725).send({ from: this.wallet, gas: 500000 }).then(async (hash) => {
+    withdrawTokens() {
+      this.profileContract.methods
+        .withdrawTokens(this.erc725).send({ from: this.wallet, gas: 500000 }).then(async (result) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
-          await window.Utilities.getTransactionReceipt(hash);
+          // await window.Utilities.getTransactionReceipt(result.transactionHash);
           window.EventBus.$emit('loading-done');
         });
     },

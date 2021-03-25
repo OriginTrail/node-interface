@@ -46,29 +46,29 @@ export default {
         confirmButtonText: 'OK',
         callback: () => {
           const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
+          window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
           tokenContract.methods
-            .increaseApproval(this.wallet, value).send({ from: this.wallet }).then(async (hash) => {
-              window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
-              await window.Utilities.getTransactionReceipt(hash);
-              window.EventBus.$emit('loading-done');
+            .increaseApproval(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading', 'Please approve second transaction');
               this.depositToken(value);
             }).catch((error) => {
               console.log(error);
+              window.EventBus.$emit('loading-done');
             });
         },
       });
     },
     depositToken(value) {
       const profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
-
       profileContract.methods
         .depositTokens(this.erc725, value).send({ from: this.wallet }).then(async (hash) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
-          await window.Utilities.getTransactionReceipt(hash);
+          // await window.Utilities.getTransactionReceipt(hash);
           window.EventBus.$emit('loading-done');
         }).catch((error) => {
           console.log(error);
+          window.EventBus.$emit('loading-done');
         });
     },
     prepareNumber() {

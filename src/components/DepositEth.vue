@@ -60,16 +60,15 @@ export default {
     }
 
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
-      console.log('MANAGEMENT WALLET CHANGED');
       this.wallet = managementWallet;
     });
   },
   methods: {
     depositEth() {
-      console.log(window.eth.currentProvider)
       this.$refs.formData.validate((valid) => {
         if (valid) {
-          const value = window.Eth.toWei(this.formData.amount, 'ether');
+          const value = this.prepareNumber().toString(16);
+          window.EventBus.$emit('loading');
           window.ethereum
             .request({
               method: 'eth_sendTransaction',
@@ -77,20 +76,20 @@ export default {
                 {
                   from: this.wallet,
                   to: this.operationalWallet,
-                  gas: '3000000',
-                  value: value.toNumber(),
+                  gas: '21000',
+                  value,
                   data:
                     '0x',
                 },
               ],
             })
             .then(async (hash) => {
-              window.EventBus.$emit('loading');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
             })
             .catch((error) => {
               console.log(error);
+              window.EventBus.$emit('loading-done');
             });
 
         } else {
@@ -98,6 +97,13 @@ export default {
           return false;
         }
       });
+    },
+    prepareNumber() {
+      const am = new window.Eth.BN(this.formData.amount * 1000);
+      const base = new window.Eth.BN(10);
+      const exponent = new window.Eth.BN(15);
+      const multiply = base.pow(exponent);
+      return am.mul(multiply);
     },
   },
 };
