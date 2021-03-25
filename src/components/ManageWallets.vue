@@ -66,7 +66,8 @@ export default {
       this.wallet = window.ethereum._state.accounts[0];
     }
     this.ercContract = new window.web3.eth.Contract(window.erc725Abi, this.erc725);
-    this.keccakContract = new window.web3.eth.Contract(window.keccakAbi, this.keccakAddress);
+    this.keccakContract = new window.web3.eth.Contract(window.keccakAbi, window.keccakAddress);
+
   },
   data() {
     return {
@@ -83,24 +84,26 @@ export default {
   },
   methods: {
     add() {
+      window.EventBus.$emit('loading');
       const arr = (this.selected_wallet_type === 'mv') ? [1, 2, 3, 4] : [2, 4];
       this.keccakContract.methods
-        .keccakAddress(this.walletToAdd).send({ from: this.wallet }).then(async (walletToAdd) => {
+        .keccakAddress(this.walletToAdd).call({ from: this.wallet }).then(async (walletToAdd) => {
           this.ercContract.methods
-            .addKey(walletToAdd[0], arr, 1).send({ from: this.wallet }).then(async (hash) => {
+            .addKey(walletToAdd, arr, 1).send({ from: this.wallet }).then(async (hash) => {
               window.EventBus.$emit('loading');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
             });
         });
     },
     remove() {
+      window.EventBus.$emit('loading');
       this.keccakContract.methods
-        .keccakAddress(this.walletToAdd).send({ from: this.wallet }).then((walletToRemove) => {
+        .keccakAddress(this.walletToAdd).call({ from: this.wallet }).then((walletToRemove) => {
           this.ercContract.methods
             .removeKey(walletToRemove).send({ from: this.wallet }).then(async (hash) => {
               window.EventBus.$emit('loading');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
             });
         });
