@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <h1>Withdraw TRAC from your Node <el-popover
+    <h1  v-if="selected_network == 'ETHEREUM'">Withdraw TRAC from your Node <el-popover
       placement="top-start"
       title="Withdraw TRAC"
       width="300"
@@ -9,7 +9,18 @@
 The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep in mind that if you withdraw all TRAC available, your node will not be able to respond to new offers because it will not be able to stake TRAC for the job. We recommend to always have some unlocked TRAC on the profile so that your node can receive new jobs.">
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
-    <p class="explanation-text">This will withdraw TRAC from your ODN node profile.</p>
+    <p   v-if="selected_network == 'ETHEREUM'" class="explanation-text">This will withdraw TRAC from your ODN node profile.</p>
+    <h1  v-if="selected_network == 'XDAI'">Withdraw xTRAC from your Node <el-popover
+      placement="top-start"
+      title="Withdraw TRAC"
+      width="300"
+      trigger="hover"
+      content="You can always withdraw the amount of unstaked (not locked in a running job) xTRAC from your node profile. This process is performed in a two-step fashion, with a 5min delay between steps. This is needed to avoid certain race conditions within the system functioning. Withdrawing xTRAC from your node profile will send the xTRAC to your management wallet.
+The maximum amount of xTRAC safe to withdraw is shown in the left sidebar. Keep in mind that if you withdraw all xTRAC available, your node will not be able to respond to new offers because it will not be able to stake xTRAC for the job. We recommend to always have some unlocked xTRAC on the profile so that your node can receive new jobs.">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
+    <p   v-if="selected_network == 'XDAI'" class="explanation-text">This will withdraw xTRAC from your ODN node profile.</p>
+
     <el-form>
       <p class="label">Wallet to withdraw to - Management wallet</p>
       <el-form-item>
@@ -26,20 +37,17 @@ The maximum amount of TRAC safe to withdraw is shown in the left sidebar. Keep i
       <el-tooltip class="item btn-tooltip" effect="dark" content="START WITHDRAWAL button will execute 2 blockchain transactions. If the second transaction fails, you can use this button to start it again. Use this button only for the second transaction." placement="top">
       <i class="el-icon-info"></i>
       </el-tooltip>
-
-
     </el-form>
   </div>
 </template>
 <script>
 export default {
-  props: ['profileAddress', 'erc725'],
+  props: ['profileAddress', 'erc725', 'selected_network'],
   mounted() {
-    window.eth.accounts().then((result) => {
-      // eslint-disable-next-line
-      this.wallet = result[0];
-    });
-
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
+    this.profileContract = new window.web3.eth.Contract(window.profileAbi, this.profileAddress);
     window.EventBus.$on('management_wallet_changed', (managementWallet) => {
       this.wallet = managementWallet;
     });
@@ -48,6 +56,7 @@ export default {
     return {
       amount: 0,
       wallet: '',
+      profileContract: null,
     };
   },
   methods: {
@@ -55,12 +64,11 @@ export default {
       this.$alert('This operation will require 2 transactions to blockchain. ', 'Important', {
         confirmButtonText: 'OK',
         callback: () => {
-          const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
-          profileContract.startTokenWithdrawal(this.erc725, this.prepareNumber(),
-            { from: this.wallet })
-            .then(async (hash) => {
-              window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
-              await window.Utilities.getTransactionReceipt(hash);
+          const value = this.prepareNumber().toString();
+          window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+          this.profileContract.methods
+            .startTokenWithdrawal(this.erc725, value).send({ from: this.wallet, gas: 500000 }).then(async (hash) => {
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
               const countDownDate = new Date().getTime() + (5 * 65 * 1000);
               const x = setInterval(() => {
@@ -83,12 +91,10 @@ export default {
       });
     },
     withdrawTokens() {
-      const profileContract = window.eth.contract(window.profileAbi).at(this.profileAddress);
-      profileContract.withdrawTokens(this.erc725,
-        { from: this.wallet })
-        .then(async (hash) => {
+      this.profileContract.methods
+        .withdrawTokens(this.erc725).send({ from: this.wallet, gas: 500000 }).then(async (result) => {
           window.EventBus.$emit('loading', 'Second transaction in progress. Please wait.');
-          await window.Utilities.getTransactionReceipt(hash);
+          // await window.Utilities.getTransactionReceipt(result.transactionHash);
           window.EventBus.$emit('loading-done');
         });
     },

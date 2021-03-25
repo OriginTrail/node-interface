@@ -1,6 +1,6 @@
 <template>
   <div class="panel">
-    <h1>Manage wallets <el-popover
+    <h1 v-if="selected_network == 'ETHEREUM'">Manage wallets <el-popover
       placement="top-start"
       title="Manage wallets"
       width="500"
@@ -10,6 +10,21 @@
 It distinguishes two different types of keys in the identity contract:
 - The operational wallet, whose private key is stored on the node itself and is used to perform a multitude of operations in the ODN (signing, execution, etc). It requires a small balance of ETH in order to be able to publish transactions to the blockchain, and it can be filled periodically. No TRAC tokens are required for this wallet
 - The management wallet, whose private key is NOT stored on the node and is used to deal with the funds (TRAC rewards) and to manage the keys associated with the ERC725 identity. The management wallet can be any ERC20 supporting wallet (Trezor, Ledger, Metamask etc).
+This approach is taken as a convenience measure to provide for flexibility with key management and to minimize the risk of loosing funds in case of the operational key stored on the node somehow gets compromised.
+You can use this interface to manage your wallets (add/remove both). IMPORTANT NOTE: Only use this interface if you know what you are doing! With improper use, your node can stop operating and you can loose your rewards!">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
+
+    <h1 v-if="selected_network == 'XDAI'">Manage wallets <el-popover
+      placement="top-start"
+      title="Manage wallets"
+      width="500"
+      trigger="hover"
+      content="The OriginTrail node identity is compatible with the ERC725 standard and utilizes it for key management.
+
+It distinguishes two different types of keys in the identity contract:
+- The operational wallet, whose private key is stored on the node itself and is used to perform a multitude of operations in the ODN (signing, execution, etc). It requires a small balance of xDai in order to be able to publish transactions to the blockchain, and it can be filled periodically. No xTRAC tokens are required for this wallet
+- The management wallet, whose private key is NOT stored on the node and is used to deal with the funds (xTRAC rewards) and to manage the keys associated with the ERC725 identity. The management wallet can be any ERC20 supporting wallet (Trezor, Ledger, Metamask etc).
 This approach is taken as a convenience measure to provide for flexibility with key management and to minimize the risk of loosing funds in case of the operational key stored on the node somehow gets compromised.
 You can use this interface to manage your wallets (add/remove both). IMPORTANT NOTE: Only use this interface if you know what you are doing! With improper use, your node can stop operating and you can loose your rewards!">
       <i class="el-icon-info" slot="reference"></i>
@@ -45,11 +60,14 @@ You can use this interface to manage your wallets (add/remove both). IMPORTANT N
 </template>
 <script>
 export default {
-  props: ['erc725'],
+  props: ['erc725', 'selected_network'],
   mounted() {
-    window.eth.accounts().then((result) => {
-      this.wallet = result[0];
-    });
+    if (window.ethereum._state.accounts.length > 0) {
+      this.wallet = window.ethereum._state.accounts[0];
+    }
+    this.ercContract = new window.web3.eth.Contract(window.erc725Abi, this.erc725);
+    this.keccakContract = new window.web3.eth.Contract(window.keccakAbi, window.keccakAddress);
+
   },
   data() {
     return {
@@ -60,34 +78,32 @@ export default {
       selected_wallet_type: 'mv',
       walletToAdd: '',
       wallet: '',
+      ercContract: null,
+      keccakContract: null,
     };
   },
   methods: {
     add() {
-      const ercContract = window.eth.contract(window.erc725Abi).at(this.erc725);
+      window.EventBus.$emit('loading');
       const arr = (this.selected_wallet_type === 'mv') ? [1, 2, 3, 4] : [2, 4];
-      const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
-      keccakContract.keccakAddress(this.walletToAdd)
-        .then((walletToAdd) => {
-          ercContract.addKey(walletToAdd[0], arr, 1,
-            { from: this.wallet })
-            .then(async (hash) => {
+      this.keccakContract.methods
+        .keccakAddress(this.walletToAdd).call({ from: this.wallet }).then(async (walletToAdd) => {
+          this.ercContract.methods
+            .addKey(walletToAdd, arr, 1).send({ from: this.wallet }).then(async (hash) => {
               window.EventBus.$emit('loading');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
             });
         });
     },
     remove() {
-      const ercContract = window.eth.contract(window.erc725Abi).at(this.erc725);
-      const keccakContract = window.eth.contract(window.keccakAbi).at(window.keccakAddress);
-      keccakContract.keccakAddress(this.walletToAdd)
-        .then((walletToRemove) => {
-          ercContract.removeKey(walletToRemove,
-            { from: this.wallet })
-            .then(async (hash) => {
+      window.EventBus.$emit('loading');
+      this.keccakContract.methods
+        .keccakAddress(this.walletToAdd).call({ from: this.wallet }).then((walletToRemove) => {
+          this.ercContract.methods
+            .removeKey(walletToRemove).send({ from: this.wallet }).then(async (hash) => {
               window.EventBus.$emit('loading');
-              await window.Utilities.getTransactionReceipt(hash);
+              // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading-done');
             });
         });

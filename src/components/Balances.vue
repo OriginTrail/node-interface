@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="balances-wrapper">
     <h2>Node profile</h2>
     <el-row v-bind:class="[
     total_trac_increased ? 'increased' : '',
@@ -7,23 +7,27 @@
     'balance-row'
     ]">
       <el-col :span="12" class="align-left">TOTAL</el-col>
-      <el-col :span="12">{{total_trac | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{total_trac | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'XDAI'" :span="12">{{total_trac | toTrac}} xTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row"
             v-bind:class="[locked_trac_changed ? 'changed' : '', 'balance-row']">
       <el-col :span="12" class="align-left">LOCKED</el-col>
-      <el-col :span="12">{{locked_trac | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{locked_trac | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'XDAI'" :span="12">{{locked_trac | toTrac}} xTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row">
       <el-col :span="12" class="align-left">MIN. STAKE</el-col>
-      <el-col :span="12">{{minimum_stake | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{minimum_stake | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'XDAI'" :span="12">{{minimum_stake | toTrac}} xTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row">
       <el-col :span="12" class="align-left">SAFE TO WITHDRAW</el-col>
-      <el-col :span="12">{{safe_to_withdraw | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{safe_to_withdraw | toTrac}} TRAC</el-col>
+      <el-col v-if="selected_network == 'XDAI'" :span="12">{{safe_to_withdraw | toTrac}} xTRAC</el-col>
     </el-row>
 
     <h2>Balances</h2>
@@ -34,7 +38,8 @@
     ow_eth_balance_decreased ? 'decreased' : '',
     'balance-row'
     ]">
-      <el-col :span="12" class="align-left">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
       <el-col :span="12">{{ow_eth_balance}}</el-col>
     </el-row>
 
@@ -45,7 +50,8 @@
     mw_eth_balance_decreased ? 'decreased' : '',
     'balance-row'
     ]">
-      <el-col :span="12" class="align-left">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
       <el-col :span="12">{{mw_eth_balance}}</el-col>
     </el-row>
 
@@ -54,14 +60,15 @@
     mw_trac_balance_decreased ? 'decreased' : '',
     'balance-row'
     ]">
-      <el-col :span="12" class="align-left">TRAC</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">TRAC</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xTRAC</el-col>
       <el-col :span="12">{{mw_trac_balance}}</el-col>
     </el-row>
   </div>
 </template>
 <script>
 export default {
-  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input'],
+  props: ['profileStorageAddress', 'erc725', 'profileAddress', 'operationalWallet', 'tokenAddress', 'management_wallet_input', 'selected_network'],
   name: 'Balances',
   data() {
     return {
@@ -230,12 +237,14 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      window.eth.accounts().then((result) => {
+      if (window.ethereum._state.accounts.length > 0) {
+        // this.wallet = window.ethereum._state.accounts[0];
+
         if (this.management_wallet_input !== '') {
           this.management_wallet = this.management_wallet_input;
           window.EventBus.$emit('management_wallet_changed', this.management_wallet);
         } else {
-          this.management_wallet = result[0];
+          this.management_wallet = window.ethereum._state.accounts[0];
           window.EventBus.$emit('management_wallet_changed', this.management_wallet);
         }
         window.eth.getBalance(this.management_wallet)
@@ -253,7 +262,10 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-      });
+      }
+      // window.eth.accounts().then((result) => {
+      //
+      // });
 
       const profileStorageContract = window.eth.contract(window.profileStorageAbi)
         .at(this.profileStorageAddress);
@@ -276,7 +288,10 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped lang="scss">
+  .balances-wrapper{
+    padding-left: 20px;
+  }
   .align-left {
     text-align: left;
   }
