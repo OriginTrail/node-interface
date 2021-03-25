@@ -19,6 +19,7 @@ export default {
 <style scoped lang="scss">
   .intro-row{
     text-align: left;
+    padding: 20px;
     .regular-p{
       font-size: 20px;
       font-weight: normal;

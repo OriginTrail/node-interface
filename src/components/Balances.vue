@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="balances-wrapper">
     <h2>Node profile</h2>
     <el-row v-bind:class="[
     total_trac_increased ? 'increased' : '',
@@ -283,7 +283,10 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped lang="scss">
+  .balances-wrapper{
+    padding-left: 20px;
+  }
   .align-left {
     text-align: left;
   }
