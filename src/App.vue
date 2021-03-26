@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header>
+            <el-header class="header-container">
                 <el-container>
                     <el-aside width="300px">
                         <img alt="OriginTrail" src="./assets/ot-dark_purple.svg" class="logo">
@@ -296,6 +296,9 @@ export default {
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
+    }
+    .header-container{
+      padding: 0 20px;
     }
 
   .logo {
