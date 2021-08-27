@@ -82,10 +82,16 @@
                         <p>Click here to manage your node decentralized identity on Ethereum</p>
                       </div>
 
-                      <div class=" xdai-blockchain-box" @click="selectNetwork('XDAI')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'XDAI' }">
+                      <div class="xdai-blockchain-box" @click="selectNetwork('XDAI')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'XDAI' }">
                         <img src="./assets/xdai.svg" alt="">
                         <h3>xDai</h3>
                         <p>Click here to manage your node decentralized identity on xDAI</p>
+                      </div>
+
+                      <div class=" polygon-blockchain-box" @click="selectNetwork('POLYGON')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'POLYGON' }">
+                        <img src="./assets/xdai.svg" alt="">
+                        <h3>Polygon</h3>
+                        <p>Click here to manage your node decentralized identity on Polygon</p>
                       </div>
 
                       <div class="blockchain-box-disabled">
@@ -97,7 +103,7 @@
 
                     <div class="landing-page-form-wrapper">
                         <div class="landing-page-inner-wrapper">
-                            <el-form v-if="selected_network == 'ETHEREUM'">
+                          <el-form v-if="selected_network == 'ETHEREUM'">
                               <h1>Ethereum</h1>
                                 <el-form-item label="Please enter your ERC725 identity"
                                              >
@@ -133,6 +139,40 @@
 
                           <el-form v-if="selected_network == 'XDAI'">
                             <h1>xDai</h1>
+                            <el-form-item label="Please enter your ERC725 identity"
+                            >
+                              <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="erc_identity"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Please enter your operational wallet address"
+                            >
+                              <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="operational_wallet"></el-input>
+                            </el-form-item>
+                            <el-form-item
+                              v-if="mobileTrue"
+                              label="Please enter your management wallet address"
+
+                            >
+                              <el-input
+                                maxlength="42"
+                                minlength="42"
+                                type="textarea"
+                                :autosize="{ minRows: 1, maxRows: 2}"
+                                resize="none"
+                                v-model="management_wallet_input"></el-input>
+                            </el-form-item>
+                            <el-button class="landing-page-button" @click="submitIdentity">CONNECT</el-button>
+                          </el-form>
+
+                          <el-form v-if="selected_network == 'POLYGON'">
+                            <h1>Polygon</h1>
                             <el-form-item label="Please enter your ERC725 identity"
                             >
                               <el-input
@@ -231,6 +271,10 @@ export default {
         window.hubAddress = '0xB4Cf5D3876FA929706A87F3B4042C741dcb3d688';
         window.keccakAddress = '0x470561DB00b4A21A35bD285c3e17e542DCa8B52c';
         window.eth = new window.Eth(new window.Eth.HttpProvider('https://rpc.xdaichain.com/origintrail/'));
+      } else if (this.selected_network === 'POLYGON') {
+        window.hubAddress = '0xe5FC9F71F8e378448c0BD0Fb8E1fb879654E3fbb';
+        window.keccakAddress = '0x470561DB00b4A21A35bD285c3e17e542DCa8B52c'; //todo check this
+        window.eth = new window.Eth(new window.Eth.HttpProvider('https://polygon-mainnet.infura.io/v3/f8c3858f892d4199840f5354cc954713'));
       }
 
       window.hub = window.eth.contract(hubAbi.default).at(window.hubAddress);

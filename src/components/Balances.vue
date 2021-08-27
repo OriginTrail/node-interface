@@ -9,6 +9,7 @@
       <el-col :span="12" class="align-left">TOTAL</el-col>
       <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{total_trac | toTrac}} TRAC</el-col>
       <el-col v-if="selected_network == 'XDAI'" :span="12">{{total_trac | toTrac}} xTRAC</el-col>
+      <el-col v-if="selected_network == 'POLYGON'" :span="12">{{total_trac | toTrac}} pTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row"
@@ -16,18 +17,21 @@
       <el-col :span="12" class="align-left">LOCKED</el-col>
       <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{locked_trac | toTrac}} TRAC</el-col>
       <el-col v-if="selected_network == 'XDAI'" :span="12">{{locked_trac | toTrac}} xTRAC</el-col>
+      <el-col v-if="selected_network == 'POLYGON'" :span="12">{{locked_trac | toTrac}} pTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row">
       <el-col :span="12" class="align-left">MIN. STAKE</el-col>
       <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{minimum_stake | toTrac}} TRAC</el-col>
       <el-col v-if="selected_network == 'XDAI'" :span="12">{{minimum_stake | toTrac}} xTRAC</el-col>
+      <el-col v-if="selected_network == 'POLYGON'" :span="12">{{minimum_stake | toTrac}} pTRAC</el-col>
     </el-row>
 
     <el-row class="balance-row">
       <el-col :span="12" class="align-left">SAFE TO WITHDRAW</el-col>
       <el-col v-if="selected_network == 'ETHEREUM'" :span="12">{{safe_to_withdraw | toTrac}} TRAC</el-col>
       <el-col v-if="selected_network == 'XDAI'" :span="12">{{safe_to_withdraw | toTrac}} xTRAC</el-col>
+      <el-col v-if="selected_network == 'POLYGON'" :span="12">{{safe_to_withdraw | toTrac}} pTRAC</el-col>
     </el-row>
 
     <h2>Balances</h2>
@@ -40,6 +44,7 @@
     ]">
       <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
       <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'POLYGON'">Polygon</el-col>
       <el-col :span="12">{{ow_eth_balance}}</el-col>
     </el-row>
 
@@ -52,6 +57,7 @@
     ]">
       <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">ETH</el-col>
       <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xDai</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'POLYGON'">Polygon</el-col>
       <el-col :span="12">{{mw_eth_balance}}</el-col>
     </el-row>
 
@@ -62,6 +68,7 @@
     ]">
       <el-col :span="12" class="align-left" v-if="selected_network == 'ETHEREUM'">TRAC</el-col>
       <el-col :span="12" class="align-left" v-if="selected_network == 'XDAI'">xTRAC</el-col>
+      <el-col :span="12" class="align-left" v-if="selected_network == 'POLYGON'">pTRAC</el-col>
       <el-col :span="12">{{mw_trac_balance}}</el-col>
     </el-row>
   </div>

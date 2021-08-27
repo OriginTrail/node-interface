@@ -20,6 +20,16 @@ The maximum amount of xTRAC safe to withdraw is shown in the left sidebar. Keep 
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
     <p   v-if="selected_network == 'XDAI'" class="explanation-text">This will withdraw xTRAC from your ODN node profile.</p>
+    <h1  v-if="selected_network == 'POLYGON'">Withdraw pTRAC from your Node <el-popover
+      placement="top-start"
+      title="Withdraw TRAC"
+      width="300"
+      trigger="hover"
+      content="You can always withdraw the amount of unstaked (not locked in a running job) xTRAC from your node profile. This process is performed in a two-step fashion, with a 5min delay between steps. This is needed to avoid certain race conditions within the system functioning. Withdrawing xTRAC from your node profile will send the xTRAC to your management wallet.
+The maximum amount of pTRAC safe to withdraw is shown in the left sidebar. Keep in mind that if you withdraw all xTRAC available, your node will not be able to respond to new offers because it will not be able to stake xTRAC for the job. We recommend to always have some unlocked xTRAC on the profile so that your node can receive new jobs.">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
+    <p   v-if="selected_network == 'POLYGON'" class="explanation-text">This will withdraw pTRAC from your ODN node profile.</p>
 
     <el-form>
       <p class="label">Wallet to withdraw to - Management wallet</p>

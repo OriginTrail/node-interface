@@ -18,6 +18,15 @@
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
     <p v-if="selected_network == 'XDAI'" class="explanation-text">This will deposit xTRAC to your profile</p>
+    <h1  v-if="selected_network == 'POLYGON'">Deposit pTRAC to Your Node <el-popover
+      placement="top-start"
+      title="Deposit TRAC"
+      width="300"
+      trigger="hover"
+      content="For the node to operate within the rules of the OriginTrail protocol, your node needs xTRAC on it's network profile smart contract. This xTRAC is used to reimburse DH nodes for their services (if you are publishing data sets as a DC node), to provide collateral (stake) as a DH node, and to provide the initial stake to join the network. Your node might from time to time respond to holding requests, which might lock in additional xTRAC if it gets picked for the job (you can observe the available xTRAC in the left sidebar), which will get unlocked once the job is completed. For each job, your node will be compensated in additional xTRAC, which will be shown on your profile once the job is complete.">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
+    <p v-if="selected_network == 'POLYGON'" class="explanation-text">This will deposit pTRAC to your profile</p>
     <el-form>
       <el-form-item label="Depositing from Management Wallet:">
         <el-input v-model="wallet" :disabled="true"></el-input>
@@ -28,6 +37,7 @@
       </el-form-item>
       <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'ETHEREUM'">DEPOSIT TRAC</el-button>
       <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'XDAI'">DEPOSIT xTRAC</el-button>
+      <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'POLYGON'">DEPOSIT pTRAC</el-button>
     </el-form>
   </div>
 </template>

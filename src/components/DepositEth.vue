@@ -16,8 +16,17 @@
       content="xDai is required for your node to be able to publish transactions to the blockchain, which is handled by your node's operational wallet. This is mostly needed if you want to publish data sets on the network (as a DC node), but sometimes also required as a DH node. It is recommended to always have around 0.1 xDai on the node operational wallet.">
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
+    <h1 v-if="selected_network == 'POLYGON'">Deposit Polygon to your Node <el-popover
+      placement="top-start"
+      title="Deposit Polygon"
+      width="300"
+      trigger="hover"
+      content="Polygon is required for your node to be able to publish transactions to the blockchain, which is handled by your node's operational wallet. This is mostly needed if you want to publish data sets on the network (as a DC node), but sometimes also required as a DH node. It is recommended to always have around 0.1 Polygon on the node operational wallet.">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
     <p class="explanation-text" v-if="selected_network == 'ETHEREUM'">This will transfer ETH to your operational wallet.</p>
     <p class="explanation-text" v-if="selected_network == 'XDAI'">This will transfer xDai to your operational wallet.</p>
+    <p class="explanation-text" v-if="selected_network == 'POLYGON'">This will transfer Polygon to your operational wallet.</p>
     <el-form :rules="rules" ref="formData" :model="formData">
       <el-form-item label="Wallet to deposit from (i.e. Management wallet)">
         <el-input v-model="wallet"></el-input>
@@ -29,6 +38,7 @@
       </el-form-item>
       <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'ETHEREUM'">DEPOSIT ETH</el-button>
       <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'XDAI'">DEPOSIT xDai</el-button>
+      <el-button @click="depositEth" class="profile-btn" v-if="selected_network == 'POLYGON'">DEPOSIT Polygon</el-button>
     </el-form>
   </div>
 </template>

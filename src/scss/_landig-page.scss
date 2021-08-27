@@ -59,13 +59,13 @@ body{
   border: 1px solid #4C569C;
 }
 
-.xdai-blockchain-box.active{
+.xdai-blockchain-box.active, .polygon-blockchain-box.active{
   background-color: #E8EBFF;
   transition: .2s all;
   border: 1px solid #4C569C;
 }
 
-.xdai-blockchain-box{
+.xdai-blockchain-box, .polygon-blockchain-box{
   background: #ffffff;
   border-radius: 4px;
   padding: 16px 24px;
