@@ -23,6 +23,7 @@ window.EventBus = new Vue();
 window.profileAbi = profileAbi.default;
 window.erc725Abi = erc725Abi.default;
 window.tokenAbi = tokenAbi.default;
+window.polygonTokenAbi = polygonTokenAbi.default;
 window.profileStorageAbi = profileStorageAbi.default;
 window.keccakAbi = keccakAbi.default;
 
@@ -39,6 +40,7 @@ if (typeof web3 === 'undefined' && window.screen.width > 770) {
 window.profileAbi = profileAbi.default;
 window.erc725Abi = erc725Abi.default;
 window.tokenAbi = tokenAbi.default;
+window.polygonTokenAbi = polygonTokenAbi.default;
 window.profileStorageAbi = profileStorageAbi.default;
 window.keccakAbi = keccakAbi.default;
 Vue.config.productionTip = false;

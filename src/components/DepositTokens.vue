@@ -61,14 +61,16 @@ export default {
   },
   methods: {
     async increaseApproval() {
+      console.log(this.selected_network);
       const value = this.prepareNumber().toString();
       this.$alert('This operation will require 2 transactions to blockchain.', 'Important', {
         confirmButtonText: 'OK',
         callback: () => {
-          const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
-          window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
-          tokenContract.methods
-            .increaseApproval(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
+          if (this.selected_network === 'POLYGON'){
+            const polygonTokenContract = new window.web3.eth.Contract(window.polygonTokenAbi, this.tokenAddress);
+            window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+            polygonTokenContract.methods
+              .increaseAllowance(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
               // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading', 'Please approve second transaction');
               this.depositToken(value);
@@ -76,6 +78,19 @@ export default {
               console.log(error);
               window.EventBus.$emit('loading-done');
             });
+          } else {
+            const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
+            window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+            tokenContract.methods
+              .increaseApproval(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
+              // await window.Utilities.getTransactionReceipt(hash);
+              window.EventBus.$emit('loading', 'Please approve second transaction');
+              this.depositToken(value);
+            }).catch((error) => {
+              console.log(error);
+              window.EventBus.$emit('loading-done');
+            });
+          }
         },
       });
     },

@@ -273,7 +273,7 @@ export default {
         window.eth = new window.Eth(new window.Eth.HttpProvider('https://rpc.xdaichain.com/origintrail/'));
       } else if (this.selected_network === 'POLYGON') {
         window.hubAddress = '0xe5FC9F71F8e378448c0BD0Fb8E1fb879654E3fbb';
-        window.keccakAddress = '0x470561DB00b4A21A35bD285c3e17e542DCa8B52c'; //todo check this
+        window.keccakAddress = '0x24800b1c2d4c48060d545bba2e199a0abd72a0d1'; //todo check this
         window.eth = new window.Eth(new window.Eth.HttpProvider('https://polygon-mainnet.infura.io/v3/f8c3858f892d4199840f5354cc954713'));
       }
 
