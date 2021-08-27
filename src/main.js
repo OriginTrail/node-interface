@@ -3,6 +3,7 @@ import ElementUI from 'element-ui';
 import * as profileAbi from './abi/profile.json';
 import * as erc725Abi from './abi/erc725.json';
 import * as tokenAbi from './abi/token.json';
+import * as polygonTokenAbi from './abi/polygonToken.json';
 import * as profileStorageAbi from './abi/profile-storage.json';
 import * as keccakAbi from './abi/testingutils.json';
 
@@ -23,6 +24,7 @@ window.EventBus = new Vue();
 window.profileAbi = profileAbi.default;
 window.erc725Abi = erc725Abi.default;
 window.tokenAbi = tokenAbi.default;
+window.polygonTokenAbi = polygonTokenAbi.default;
 window.profileStorageAbi = profileStorageAbi.default;
 window.keccakAbi = keccakAbi.default;
 
@@ -39,6 +41,7 @@ if (typeof web3 === 'undefined' && window.screen.width > 770) {
 window.profileAbi = profileAbi.default;
 window.erc725Abi = erc725Abi.default;
 window.tokenAbi = tokenAbi.default;
+window.polygonTokenAbi = polygonTokenAbi.default;
 window.profileStorageAbi = profileStorageAbi.default;
 window.keccakAbi = keccakAbi.default;
 Vue.config.productionTip = false;

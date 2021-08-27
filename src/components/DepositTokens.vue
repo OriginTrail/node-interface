@@ -18,6 +18,15 @@
       <i class="el-icon-info" slot="reference"></i>
     </el-popover></h1>
     <p v-if="selected_network == 'XDAI'" class="explanation-text">This will deposit xTRAC to your profile</p>
+    <h1  v-if="selected_network == 'POLYGON'">Deposit TRAC (Polygon) to Your Node <el-popover
+      placement="top-start"
+      title="Deposit TRAC"
+      width="300"
+      trigger="hover"
+      content="For the node to operate within the rules of the OriginTrail protocol, your node needs xTRAC on it's network profile smart contract. This xTRAC is used to reimburse DH nodes for their services (if you are publishing data sets as a DC node), to provide collateral (stake) as a DH node, and to provide the initial stake to join the network. Your node might from time to time respond to holding requests, which might lock in additional xTRAC if it gets picked for the job (you can observe the available xTRAC in the left sidebar), which will get unlocked once the job is completed. For each job, your node will be compensated in additional xTRAC, which will be shown on your profile once the job is complete.">
+      <i class="el-icon-info" slot="reference"></i>
+    </el-popover></h1>
+    <p v-if="selected_network == 'POLYGON'" class="explanation-text">This will deposit TRAC (Polygon) to your profile</p>
     <el-form>
       <el-form-item label="Depositing from Management Wallet:">
         <el-input v-model="wallet" :disabled="true"></el-input>
@@ -28,6 +37,7 @@
       </el-form-item>
       <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'ETHEREUM'">DEPOSIT TRAC</el-button>
       <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'XDAI'">DEPOSIT xTRAC</el-button>
+      <el-button @click="increaseApproval" class="profile-btn" v-if="selected_network == 'POLYGON'">DEPOSIT TRAC (Polygon)</el-button>
     </el-form>
   </div>
 </template>
@@ -51,14 +61,16 @@ export default {
   },
   methods: {
     async increaseApproval() {
+      console.log(this.selected_network);
       const value = this.prepareNumber().toString();
       this.$alert('This operation will require 2 transactions to blockchain.', 'Important', {
         confirmButtonText: 'OK',
         callback: () => {
-          const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
-          window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
-          tokenContract.methods
-            .increaseApproval(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
+          if (this.selected_network === 'POLYGON'){
+            const polygonTokenContract = new window.web3.eth.Contract(window.polygonTokenAbi, this.tokenAddress);
+            window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+            polygonTokenContract.methods
+              .increaseAllowance(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
               // await window.Utilities.getTransactionReceipt(hash);
               window.EventBus.$emit('loading', 'Please approve second transaction');
               this.depositToken(value);
@@ -66,6 +78,19 @@ export default {
               console.log(error);
               window.EventBus.$emit('loading-done');
             });
+          } else {
+            const tokenContract = new window.web3.eth.Contract(window.tokenAbi, this.tokenAddress);
+            window.EventBus.$emit('loading', 'First transaction in progress. Please wait.');
+            tokenContract.methods
+              .increaseApproval(this.profileAddress, value).send({ from: this.wallet }).then(async (hash) => {
+              // await window.Utilities.getTransactionReceipt(hash);
+              window.EventBus.$emit('loading', 'Please approve second transaction');
+              this.depositToken(value);
+            }).catch((error) => {
+              console.log(error);
+              window.EventBus.$emit('loading-done');
+            });
+          }
         },
       });
     },
