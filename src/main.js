@@ -3,6 +3,7 @@ import ElementUI from 'element-ui';
 import * as profileAbi from './abi/profile.json';
 import * as erc725Abi from './abi/erc725.json';
 import * as tokenAbi from './abi/token.json';
+import * as polygonTokenAbi from './abi/polygonToken.json';
 import * as profileStorageAbi from './abi/profile-storage.json';
 import * as keccakAbi from './abi/testingutils.json';
 
