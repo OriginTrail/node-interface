@@ -89,7 +89,7 @@
                       </div>
 
                       <div class=" polygon-blockchain-box" @click="selectNetwork('POLYGON')" v-on:click="isActive = !isActive" v-bind:class="{ active: selected_network === 'POLYGON' }">
-                        <img src="./assets/xdai.svg" alt="" id="hidden_id">
+                        <img src="./assets/polygon.svg" alt="">
                         <h3>Polygon</h3>
                         <p>Click here to manage your node decentralized identity on Polygon</p>
                       </div>
@@ -364,10 +364,6 @@ export default {
   .panel-form {
     width: 400px;
     margin: 100px auto;
-  }
-
-  #hidden_id{
-    visibility:hidden;
   }
 
   .el-message-box {
