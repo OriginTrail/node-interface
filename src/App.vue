@@ -270,7 +270,7 @@ export default {
       } else if (this.selected_network === 'XDAI') {
         window.hubAddress = '0xB4Cf5D3876FA929706A87F3B4042C741dcb3d688';
         window.keccakAddress = '0x470561DB00b4A21A35bD285c3e17e542DCa8B52c';
-        window.eth = new window.Eth(new window.Eth.HttpProvider('https://rpc.xdaichain.com/origintrail/'));
+        window.eth = new window.Eth(new window.Eth.HttpProvider('https://rpc.gnosischain.com/'));
       } else if (this.selected_network === 'POLYGON') {
         window.hubAddress = '0xe5FC9F71F8e378448c0BD0Fb8E1fb879654E3fbb';
         window.keccakAddress = '0x24800b1c2d4c48060d545bba2e199a0abd72a0d1'; //todo check this
